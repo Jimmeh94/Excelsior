@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.github.Jimmeh94</groupId>
             <artifactId>ExcelsiorCoreSpigot</artifactId>
-            <version>-0.0.2-g963b98d-1</version>
+            <version>0.0.2.3</version>
         </dependency>
 
     </dependencies>
