@@ -7,6 +7,18 @@
     <groupId>com.excelsiormc</groupId>
     <artifactId>Excelsior</artifactId>
     <version>1.0.0</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
         <repository>
@@ -20,7 +32,7 @@
         <dependency>
             <groupId>com.github.Jimmeh94</groupId>
             <artifactId>ExcelsiorCoreSpigot</artifactId>
-            <version>0.0.2.3</version>
+            <version>0.0.1.1a</version>
         </dependency>
 
     </dependencies>

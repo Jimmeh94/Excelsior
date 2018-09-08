@@ -1,24 +1,37 @@
 package excelsior;
 
 import ecore.ECore;
-import ecore.events.PlayerEvents;
+import excelsior.events.PlayerEvents;
+import excelsior.game.chatchannels.ChatChannelAuction;
+import excelsior.game.chatchannels.ChatChannelGlobal;
+import excelsior.game.chatchannels.ChatChannelStaff;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Excelsior extends JavaPlugin {
 
+    //TODO Make all function calls in PlayerQuitEvent as one function in ECore
+
+    public static Excelsior INSTANCE;
+
     @Override
     public void onEnable(){
-        new ECore(getConfig().getString("database-username"), getConfig().getString("database-password"),
-                getConfig().getString("database-ip"), getConfig().getString("database-name"));
+        INSTANCE = this;
 
         registerListeners();
         registerCommands();
         registerRunnables();
+
+        ECore.INSTANCE.getChannels().add(new ChatChannelGlobal());
+        ECore.INSTANCE.getChannels().add(new ChatChannelAuction());
+        ECore.INSTANCE.getChannels().add(new ChatChannelStaff());
+
+        getLogger().info(">> " + getDescription().getName() + " v" + getDescription().getVersion() + " enabled! <<");
     }
 
     @Override
     public void onDisable(){
-        ECore.INSTANCE.shutdown();
+
+        getLogger().info(">> " + getDescription().getName() + " v" + getDescription().getVersion() + " disabled! <<");
     }
 
     private void registerListeners(){

@@ -1,0 +1,7 @@
+author: Jimmy
+name: Excelsior
+version: 1.0.0
+main: excelsior.Excelsior
+depend: [ExcelsiorCore]
+commands:
+
