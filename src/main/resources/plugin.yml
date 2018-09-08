@@ -4,4 +4,7 @@ version: 1.0.0
 main: excelsior.Excelsior
 depend: [ExcelsiorCore]
 commands:
+  test:
+    usage: /<command>
+    description: To test things
 

@@ -1,6 +1,7 @@
 package excelsior;
 
 import ecore.ECore;
+import excelsior.commands.TestCommands;
 import excelsior.events.PlayerEvents;
 import excelsior.game.chatchannels.ChatChannelAuction;
 import excelsior.game.chatchannels.ChatChannelGlobal;
@@ -39,6 +40,7 @@ public class Excelsior extends JavaPlugin {
     }
 
     private void registerCommands(){
+        getCommand("test").setExecutor(new TestCommands());
 
     }
 
