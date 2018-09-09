@@ -1,5 +1,6 @@
 package excelsior.runnables;
 
+import ecore.runnables.AbstractTimer;
 import excelsior.Excelsior;
 
 public class TimerDirectionalAimArenas extends AbstractTimer {
