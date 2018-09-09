@@ -107,16 +107,10 @@ public abstract class Gamemode {
                                     continue;
                                 }
                                 if(cpp.getCurrentAim() != null) {
-                                    for (Vector v : cpp.getCurrentAim().getVectors()) {
-                                        player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                                                cpp.getCurrentAim().getMaterial(), cpp.getCurrentAim().getData());
-                                    }
+                                    cpp.getCurrentAim().clearAimForPlayer(player);
                                 }
                                 cpp.setCurrentAim(cell);
-                                for(Vector v: cpp.getCurrentAim().getVectors()){
-                                    player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                                            Material.STAINED_GLASS, ByteColors.RED);
-                                }
+                                cpp.getCurrentAim().drawAimForPlayer(player);
                             }
                         }
                     }

@@ -1,8 +1,11 @@
 package excelsior.game.match.field;
 
+import ecore.services.ByteColors;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -59,6 +62,20 @@ public class Cell {
     public void destroyCell(){
         for(Vector v: locations){
             Bukkit.getWorld(world).getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ()).setType(Material.AIR);
+        }
+    }
+
+    public void drawAimForPlayer(Player player){
+        for(Vector v: getVectors()){
+            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
+                    Material.STAINED_GLASS, ByteColors.RED);
+        }
+    }
+
+    public void clearAimForPlayer(Player player){
+        for (Vector v : getVectors()) {
+            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
+                    getMaterial(), getData());
         }
     }
 
