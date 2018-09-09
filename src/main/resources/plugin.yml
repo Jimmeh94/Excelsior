@@ -7,4 +7,7 @@ commands:
   test:
     usage: /<command>
     description: To test things
+  arena:
+    usage: /<command>
+    description: Arena commands
 

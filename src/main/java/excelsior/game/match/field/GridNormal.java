@@ -1,5 +1,6 @@
 package excelsior.game.match.field;
 
+import ecore.services.ByteColors;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
@@ -8,10 +9,9 @@ import org.bukkit.util.Vector;
  */
 public class GridNormal extends Grid {
 
-    public GridNormal(Vector startingPos, String world) {
-        super(startingPos, world);
+    public GridNormal(Vector startingPos, String world, int gridX, int gridZ, int cellX, int cellZ, boolean drawGrid) {
+        super(startingPos, world, gridX, gridZ, cellX, cellZ, drawGrid);
 
-        drawGrid();
     }
 
     @Override
@@ -19,10 +19,10 @@ public class GridNormal extends Grid {
 
         Vector use = startingPos.clone();
         Vector endPosition = use.clone();
-        for(int i = 0; i < 11; i++){
-            for(int j = 0; j < 11; j++){
-                cells.add(new Cell(use, 3, 3, world));
-                use.setZ(use.getBlockZ() + 4);
+        for(int i = 0; i < gridDemX; i++){
+            for(int j = 0; j < gridDemZ; j++){
+                cells.add(new Cell(use, cellDemX, cellDemZ, world, Material.BARRIER, (byte)0));
+                use.setZ(use.getBlockZ() + cellDemZ + 1);
                 //Plus 4 with 3 wide cells will leave a 1 block open area between each cell
                 if(j == 10){
                     endPosition = use.clone();
@@ -31,10 +31,10 @@ public class GridNormal extends Grid {
             }
             use.setZ(startingPos.getBlockZ());
 
-            if(i < 10) {
-                use.setX(use.getBlockX() + 4);
+            if(i < gridDemX) {
+                use.setX(use.getBlockX() + cellDemX + 1);
             } else {
-                endPosition.setX(use.getBlockX() + 4);
+                endPosition.setX(use.getBlockX() + cellDemX + 1);
             }
         }
 
