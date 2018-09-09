@@ -6,6 +6,7 @@ import ecore.services.messages.messagers.TitleMessager;
 import excelsior.game.match.profiles.CombatantProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,5 +53,31 @@ public class Team {
 
     public List<CombatantProfile> getCombatants() {
         return combatants;
+    }
+
+    public boolean isEmptyOfPlayers() {
+        for(CombatantProfile profile: combatants){
+            if(profile.isPlayer()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isPlayerCombatant(Player player) {
+        for(CombatantProfile p: combatants){
+            if(p.isPlayer() && p.getUUID().compareTo(player.getUniqueId()) == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void playerQuit(Player player) {
+        for(CombatantProfile c: combatants){
+            if(c.isPlayer() && c.getUUID().compareTo(player.getUniqueId()) == 0){
+                combatants.remove(c);
+            }
+        }
     }
 }

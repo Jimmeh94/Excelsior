@@ -1,6 +1,7 @@
 package excelsior.events;
 
 import ecore.ECore;
+import excelsior.Excelsior;
 import excelsior.game.chatchannels.ChatChannelKeys;
 import excelsior.game.user.UserPlayer;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,8 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onLeave(PlayerQuitEvent event){
         event.setQuitMessage(null);
+
+        Excelsior.INSTANCE.getArenaManager().checkPlayer(event.getPlayer());
 
         ECore.INSTANCE.playerQuit(event.getPlayer());
     }

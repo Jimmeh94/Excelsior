@@ -2,6 +2,7 @@ package excelsior.game.match;
 
 import excelsior.game.match.field.Grid;
 import excelsior.game.match.gamemodes.Gamemode;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -69,6 +70,15 @@ public class Arena {
     public void start(Gamemode gamemode) {
         inUse = true;
         this.gamemode = gamemode;
+        this.gamemode.setArena(this);
         gamemode.start(grid.getStartPos());
+    }
+
+    public boolean isPlayerCombatant(Player player) {
+        return gamemode.isPlayerCombatant(player);
+    }
+
+    public void playerQuit(Player player) {
+        gamemode.playerQuit(player);
     }
 }

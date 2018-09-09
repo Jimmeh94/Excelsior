@@ -1,6 +1,7 @@
 package excelsior.game.match.gamemodes;
 
 import ecore.services.ByteColors;
+import excelsior.game.match.Arena;
 import excelsior.game.match.Team;
 import excelsior.game.match.field.Cell;
 import excelsior.game.match.field.Grid;
@@ -17,17 +18,14 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class Gamemode {
-
-    //TODO Make sure players are still connected. If one leaves, remove from team replace with bot
-    //TODO If whole team leaves, end game or option to replace with bot
 
     protected List<Team> teams;
     private int timeLimit; //in seconds
     private TurnManager turnManager;
     protected String world;
+    protected Arena arena;
 
     public Gamemode(int timeLimit, int timeLimitForEachTurn, String world){
         teams = new ArrayList<>();
@@ -38,16 +36,50 @@ public abstract class Gamemode {
     }
 
     protected abstract void tick();
-    protected abstract void endGame();
+    protected abstract void endingGame();
+    protected abstract void startingGame();
+
+    /**
+     * ID of the gamemode.
+     * Duel = 0
+     * Not sure if this will ever be used or not
+     * @return
+     */
     public abstract int getID();
-    public abstract void start(Vector start);
+
+    public void start(Vector start){
+        for(Team team: teams){
+            for(CombatantProfile p: team.getCombatants()){
+                if(p.isPlayer()){
+                    Bukkit.getPlayer(p.getUUID()).teleport(new Location(Bukkit.getWorld(world), start.getX(), start.getY(), start.getZ()));
+                }
+            }
+        }
+        startingGame();
+    }
+
+    public void endGame(){
+        arena.getGrid().resetCells();
+        endingGame();
+        arena = null;
+    }
+
+    public void setArena(Arena arena) {
+        this.arena = arena;
+    }
 
     public void baseTick(){
-
         timeLimit--;
         if(timeLimit == 0){
             endGame();
         } else {
+            for(Team team: teams){
+                if(team.isEmptyOfPlayers()){
+                    //TODO if not a PlayerVsAI game or if players don't want them to be repalced by bots
+                    //TODO game should end and the other team should win
+                }
+            }
+
             if(turnManager.needToStartNextTurn()){
                 turnManager.startNextTurn(teams);
             }
@@ -91,6 +123,24 @@ public abstract class Gamemode {
                 }
             }
         }
+    }
+
+    public boolean isPlayerCombatant(Player player) {
+        for(Team team: teams){
+            if(team.isPlayerCombatant(player)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void playerQuit(Player player) {
+        for(Team team: teams){
+            if(team.isPlayerCombatant(player)){
+                team.playerQuit(player);
+            }
+        }
+        //TODO do something here. Give option to other players to continue, continue with bot, or leave
     }
 
 

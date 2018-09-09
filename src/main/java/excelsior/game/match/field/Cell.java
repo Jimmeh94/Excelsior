@@ -17,6 +17,7 @@ public class Cell {
     private String world;
     private Material material;
     private byte data;
+    private boolean isAvailable = true;
 
     public Cell(Vector startingPos, int xDem, int zDem, String world, Material material, byte data) {
         this.world = world;
@@ -71,5 +72,19 @@ public class Cell {
 
     public byte getData() {
         return data;
+    }
+
+    public Vector getCenter() {
+        //Assuming that the cell size is odd
+        int size = locations.size();
+        return locations.get((size / 2) + 1);
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean b) {
+        this.isAvailable = b;
     }
 }

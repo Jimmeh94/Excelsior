@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -55,6 +56,23 @@ public abstract class Grid {
             block.setType(gridBorder);
             block.setData(gridBorderData);
         }
+    }
+
+    public List<Cell> getAdjacentAvailableCells(Cell current){
+        Vector center = current.getCenter();
+        List<Cell> give = new ArrayList<>();
+
+        //get cell in +x, -x, +z, -z
+        Vector use = center.clone();
+        use.setX(use.getBlockX() + cellDemX + 1);
+        if(isCell(use)){
+            Cell target = getCell(use).get();
+            if(target.isAvailable()){
+                give.add(target);
+            }
+        }
+
+        return give;
     }
 
     public Material getGridBorder() {
@@ -119,5 +137,11 @@ public abstract class Grid {
 
     public int getCellZ(){
         return cellDemZ;
+    }
+
+    public void resetCells() {
+        for(Cell cell: cells){
+            cell.setAvailable(true);
+        }
     }
 }

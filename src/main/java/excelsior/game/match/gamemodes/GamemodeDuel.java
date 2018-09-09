@@ -22,7 +22,12 @@ public class GamemodeDuel extends Gamemode {
     }
 
     @Override
-    protected void endGame() {
+    protected void endingGame() {
+
+    }
+
+    @Override
+    protected void startingGame() {
 
     }
 
@@ -33,12 +38,6 @@ public class GamemodeDuel extends Gamemode {
 
     @Override
     public void start(Vector start) {
-        for(Team team: teams){
-            for(CombatantProfile p: team.getCombatants()){
-                if(p.isPlayer()){
-                    Bukkit.getPlayer(p.getUUID()).teleport(new Location(Bukkit.getWorld(world), start.getX(), start.getY(), start.getZ()));
-                }
-            }
-        }
+
     }
 }
