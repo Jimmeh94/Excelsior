@@ -1,5 +1,6 @@
 package excelsior.commands;
 
+import ecore.services.ByteColors;
 import excelsior.Excelsior;
 import excelsior.game.match.Arena;
 import excelsior.game.match.Team;
@@ -8,6 +9,7 @@ import excelsior.game.match.field.GridNormal;
 import excelsior.game.match.gamemodes.GamemodeDuel;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,18 +26,16 @@ public class TestCommands implements CommandExecutor {
                 if(args[0].equalsIgnoreCase("grid")){
 
                     Location location = player.getLocation();
-                    new GridNormal(location.toVector(), location.getWorld().getName(), 11, 11, 3, 3, true);
+                    new GridNormal(location.toVector(), location.getWorld().getName(), 11, 11, 3, 3, true,
+                            Material.STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
 
                 } else if(args[0].equalsIgnoreCase("arena")){
                     Location location = player.getLocation();
 
-                    GamemodeDuel duel = new GamemodeDuel(location.getWorld().getName());
-                    duel.addTeam(new Team(new CombatantProfilePlayer(player.getUniqueId())));
-                    duel.addTeam(new Team(new CombatantProfilePlayer(player.getUniqueId())));
+                    Grid grid = new GridNormal(location.toVector(), location.getWorld().getName(), 11, 11, 3, 3, true,
+                            Material.STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
 
-                    Grid grid = new GridNormal(location.toVector(), location.getWorld().getName(), 11, 11, 3, 3, true);
-
-                    Excelsior.INSTANCE.getArenaManager().add(new Arena(duel, grid, player.getLocation().getWorld().getName()));
+                    Excelsior.INSTANCE.getArenaManager().add(new Arena(grid, player.getLocation().getWorld().getName()));
                 }
             }
         }

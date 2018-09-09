@@ -3,6 +3,7 @@ package excelsior.game.match;
 import excelsior.game.match.field.Grid;
 import excelsior.game.match.gamemodes.Gamemode;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class Arena {
@@ -13,12 +14,11 @@ public class Arena {
     private String world;
     private boolean inUse = false;
 
-    public Arena(Gamemode gamemode, Grid grid, String world) {
-        this(gamemode, grid, world, UUID.randomUUID());
+    public Arena(Grid grid, String world) {
+        this(grid, world, UUID.randomUUID());
     }
 
-    public Arena(Gamemode gamemode, Grid grid, String world, UUID id){
-        this.gamemode = gamemode;
+    public Arena(Grid grid, String world, UUID id){
         this.grid = grid;
         this.world = world;
         this.id = id;
@@ -44,8 +44,11 @@ public class Arena {
         return world;
     }
 
-    public int getGamemodeID() {
-        return gamemode.getID();
+    public Optional<Integer> getGamemodeID() {
+        if(gamemode == null){
+            return Optional.empty();
+        }
+        return Optional.of(gamemode.getID());
     }
 
     public Grid getGrid() {
@@ -59,11 +62,13 @@ public class Arena {
     public void end(){
         inUse = false;
         //TODO TP players out
+
+        gamemode = null;
     }
 
-    public void start() {
+    public void start(Gamemode gamemode) {
         inUse = true;
-        //TODO TP players to arena
+        this.gamemode = gamemode;
         gamemode.start(grid.getStartPos());
     }
 }

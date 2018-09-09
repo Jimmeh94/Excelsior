@@ -9,8 +9,9 @@ import org.bukkit.util.Vector;
  */
 public class GridNormal extends Grid {
 
-    public GridNormal(Vector startingPos, String world, int gridX, int gridZ, int cellX, int cellZ, boolean drawGrid) {
-        super(startingPos, world, gridX, gridZ, cellX, cellZ, drawGrid);
+    public GridNormal(Vector startingPos, String world, int gridX, int gridZ, int cellX, int cellZ, boolean drawGrid,
+                      Material gridBorder, byte gridBorderData, Material cellMat, byte cellData) {
+        super(startingPos, world, gridX, gridZ, cellX, cellZ, drawGrid, gridBorder, gridBorderData, cellMat, cellData);
 
     }
 
@@ -21,7 +22,7 @@ public class GridNormal extends Grid {
         Vector endPosition = use.clone();
         for(int i = 0; i < gridDemX; i++){
             for(int j = 0; j < gridDemZ; j++){
-                cells.add(new Cell(use, cellDemX, cellDemZ, world, Material.BARRIER, (byte)0));
+                cells.add(new Cell(use, cellDemX, cellDemZ, world, cellMat, cellData));
                 use.setZ(use.getBlockZ() + cellDemZ + 1);
                 //Plus 4 with 3 wide cells will leave a 1 block open area between each cell
                 if(j == 10){

@@ -1,6 +1,7 @@
 package excelsior.commands;
 
 import ecore.ECore;
+import ecore.services.ByteColors;
 import ecore.services.messages.ServiceMessager;
 import excelsior.Excelsior;
 import excelsior.game.match.Arena;
@@ -11,6 +12,7 @@ import excelsior.game.match.gamemodes.GamemodeDuel;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,10 +35,9 @@ public class ArenaCommands implements CommandExecutor {
                         String world = player.getLocation().getWorld().getName();
                         Location location = player.getLocation();
                         location.subtract(0, 1, 0);
-                        Excelsior.INSTANCE.getArenaManager().add(new Arena(new GamemodeDuel(world),
-                                new GridNormal(location.toVector(), world, Integer.valueOf(args[1]),
-                                        Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), false),
-                                world));
+                        Excelsior.INSTANCE.getArenaManager().add(new Arena(new GridNormal(location.toVector(), world, Integer.valueOf(args[1]),
+                                        Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]),
+                                        false, Material.STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK), world));
 
                     } else if(args[0].equalsIgnoreCase("start")){
 
@@ -46,9 +47,9 @@ public class ArenaCommands implements CommandExecutor {
                             return true;
                         }
 
-                        Gamemode gamemode = arena.get().getGamemode();
+                        Gamemode gamemode = new GamemodeDuel(arena.get().getWorld());
                         gamemode.addTeam(new Team(new CombatantProfilePlayer(player.getUniqueId())));
-                        arena.get().start();
+                        arena.get().start(gamemode);
                     }
                 }
             }

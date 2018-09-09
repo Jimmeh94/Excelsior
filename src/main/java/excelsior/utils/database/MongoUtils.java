@@ -11,6 +11,7 @@ import excelsior.game.match.field.GridNormal;
 import excelsior.game.match.gamemodes.Gamemode;
 import excelsior.game.match.gamemodes.GamemodeDuel;
 import org.bson.Document;
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -41,19 +42,17 @@ public class MongoUtils {
                     UUID id = UUID.fromString(document.getString("id"));
                     String world = document.getString("world");
 
-                    Gamemode gamemode;
-                    switch(document.getInteger("gamemode")){
-                        case 0: gamemode = new GamemodeDuel(world);
-                            break;
-                         default: gamemode = new GamemodeDuel(world);
-                    }
-
                     Document gridDoc = (Document) document.get("grid");
                     String[] temp = gridDoc.getString("startPos").split(",");
                     Vector v = new Vector(Double.valueOf(temp[0]), Double.valueOf(temp[1]), Double.valueOf(temp[2]));
                     int gx = gridDoc.getInteger("gridX"), gz = gridDoc.getInteger("gridZ");
                     int cx = gridDoc.getInteger("cellX"), cz = gridDoc.getInteger("cellZ");
-                    Excelsior.INSTANCE.getArenaManager().add(new Arena(gamemode, new GridNormal(v, world, gx, gz, cx, cz, false), world, id));
+                    Material gridBorder = Material.valueOf(document.getString("gridBorder"));
+                    Material cellMat = Material.valueOf(document.getString("cellMat"));
+                    byte gridBorderData = (byte)(document.get("gridBorderData"));
+                    byte cellData = (byte) document.get("cellData");
+                    Excelsior.INSTANCE.getArenaManager().add(new Arena(new GridNormal(v, world, gx, gz, cx, cz, false,
+                            gridBorder, gridBorderData, cellMat, cellData), world, id));
                 }
             });
         }
@@ -82,14 +81,16 @@ public class MongoUtils {
 
                 write.add(new Document("id", arena.getID().toString())
                         .append("world", arena.getWorld())
-                        .append("gamemode", arena.getGamemodeID())
                         .append("grid", new Document("startPos", startPos)
                                     .append("gridX", arena.getGrid().getGridX())
                                     .append("gridZ", arena.getGrid().getGridZ())
                                     .append("cellX", arena.getGrid().getCellX())
                                     .append("cellZ", arena.getGrid().getCellZ())
                         )
-
+                        .append("gridBorder", arena.getGrid().getGridBorder().toString())
+                        .append("gridBorderData", arena.getGrid().getGridBorderData())
+                        .append("cellMat", arena.getGrid().getCellMat().toString())
+                        .append("cellData", arena.getGrid().getCellData())
                 );
             }
 

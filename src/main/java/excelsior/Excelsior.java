@@ -16,11 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Excelsior extends JavaPlugin {
 
     //TODO Make sure title sending works in ECore, look in the Team class at broacastingTurnMessage
-    //TODO Make it to where the arena can exist without specified gamemode. The gamemode is given to it once a match
-    //TODO is ready to start, allowing players to pick their gamemode
     //TODO implement permissions system in ECore, be sure to add to staff chat channel and arena commands
-    //TODO TP players to arena when Arena.starr() is called
-    //TODO each grid needs to save border and cell style and apply it in GenerateCells()
 
     public static Excelsior INSTANCE;
 
