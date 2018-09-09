@@ -33,7 +33,7 @@ public class Team {
         for(CombatantProfile c: combatants){
             if(c.isPlayer()){
                 ECore.INSTANCE.getMessager().sendMessage(Bukkit.getPlayer(c.getUUID()), ChatColor.YELLOW + "It's your turn", Optional.of(ServiceMessager.Prefix.DUEL));
-                ECore.INSTANCE.getMessager().getTitleMessager().send(Bukkit.getPlayer(c.getUUID()), TitleMessager.Type.SUBTITLE,
+                ECore.INSTANCE.getMessager().getTitleMessager().sendTitle(Bukkit.getPlayer(c.getUUID()), null,
                         ChatColor.GRAY + "It's your turn", 1, 2, 1);
             }
         }
@@ -44,7 +44,7 @@ public class Team {
         for(CombatantProfile c: combatants){
             if(c.isPlayer()){
                 ECore.INSTANCE.getMessager().sendMessage(Bukkit.getPlayer(c.getUUID()), s, Optional.of(ServiceMessager.Prefix.DUEL));
-                ECore.INSTANCE.getMessager().getTitleMessager().send(Bukkit.getPlayer(c.getUUID()), TitleMessager.Type.SUBTITLE,
+                ECore.INSTANCE.getMessager().getTitleMessager().sendTitle(Bukkit.getPlayer(c.getUUID()), null,
                         s, 1, 2, 1);
             }
         }
