@@ -41,6 +41,7 @@ public abstract class CardBase {
         //TODO set lore
         ItemMeta meta = mesh.getItemMeta();
         meta.setDisplayName(name);
+        mesh.setItemMeta(meta);
     }
 
     public ItemStack getMesh() {

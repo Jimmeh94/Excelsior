@@ -1,9 +1,9 @@
 package excelsior.game.match.gamemodes;
 
 import ecore.ECore;
-import ecore.services.ByteColors;
 import ecore.services.messages.ServiceMessager;
 import excelsior.game.hotbars.Hotbars;
+import excelsior.game.hotbars.duel.HotbarHand;
 import excelsior.game.match.Arena;
 import excelsior.game.match.Team;
 import excelsior.game.match.field.Cell;
@@ -11,6 +11,7 @@ import excelsior.game.match.field.Grid;
 import excelsior.game.match.profiles.CombatantProfile;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.game.user.UserPlayer;
+import excelsior.utils.PlayerUtils;
 import excelsior.utils.TimeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -60,6 +61,7 @@ public abstract class Gamemode {
         for(Team team: teams){
             for(CombatantProfile p: team.getCombatants()){
                 if(p.isPlayer()){
+                    PlayerUtils.getUserPlayer(Bukkit.getPlayer(p.getUUID())).get().setPlayerMode(UserPlayer.PlayerMode.ARENA_DUEL);
                     Bukkit.getPlayer(p.getUUID()).teleport(new Location(Bukkit.getWorld(world), start.getX(), start.getY(), start.getZ()));
                 }
             }
@@ -72,6 +74,15 @@ public abstract class Gamemode {
         arena.getGrid().resetCells();
         endingGame();
         arena = null;
+        for(Team team: teams){
+            for(CombatantProfile p: team.getCombatants()){
+                if(p.isPlayer()){
+                    PlayerUtils.getUserPlayer(Bukkit.getPlayer(p.getUUID())).get().setPlayerMode(UserPlayer.PlayerMode.NORMAL);
+                    //Teleport out
+                    //Bukkit.getPlayer(p.getUUID()).teleport(new Location(Bukkit.getWorld(world), start.getX(), start.getY(), start.getZ()));
+                }
+            }
+        }
     }
 
     public void setArena(Arena arena) {
@@ -91,7 +102,9 @@ public abstract class Gamemode {
                         c.getDeck().shuffleCards();
                         c.drawHand();
                         if(c.isPlayer()){
-                            ((CombatantProfilePlayer)c).getHotbarHand().setHotbar(Bukkit.getPlayer(c.getUUID()));
+                            UserPlayer userPlayer = PlayerUtils.getUserPlayer(Bukkit.getPlayer(c.getUUID())).get();
+                            userPlayer.setCurrentHotbar(new HotbarHand((CombatantProfilePlayer) c));
+                            userPlayer.getCurrentHotbar().setHotbar(userPlayer.getPlayer());
                         }
                     }
                 }
@@ -143,7 +156,7 @@ public abstract class Gamemode {
                 } else {
                     for(CombatantProfile c: team.getCombatants()){
                         if(c.isPlayer()){
-                            UserPlayer user = (UserPlayer) ECore.INSTANCE.getUsers().findPlayerInfo(c.getUUID()).get();
+                            UserPlayer user = PlayerUtils.getUserPlayer(Bukkit.getPlayer(c.getUUID())).get();
                             user.updateScoreboard();
                         }
                     }
@@ -162,6 +175,10 @@ public abstract class Gamemode {
     }
 
     public void updatePlayersAim(Grid grid) {
+        if(gameStage != Stage.IN_GAME){
+            return;
+        }
+
         for(Team team: teams){
             for(CombatantProfile p: team.getCombatants()){
                 if(p.isPlayer()){

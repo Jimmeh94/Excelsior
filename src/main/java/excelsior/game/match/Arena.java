@@ -108,4 +108,8 @@ public class Arena {
         }
         return Optional.empty();
     }
+
+    public boolean isPlayersTurn(Player player) {
+        return gamemode.isPlayersTurn(player);
+    }
 }

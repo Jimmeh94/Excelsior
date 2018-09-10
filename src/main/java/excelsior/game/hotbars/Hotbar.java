@@ -1,5 +1,9 @@
 package excelsior.game.hotbars;
 
+import ecore.ECore;
+import excelsior.game.user.UserPlayer;
+import excelsior.utils.PlayerUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,6 +46,14 @@ public abstract class Hotbar {
             player.getInventory().setItem(entry.getKey(), entry.getValue());
         }
         player.updateInventory();
+
+        PlayerUtils.getUserPlayer(Bukkit.getPlayer(player.getUniqueId())).get().setCurrentHotbar(this);
+    }
+
+    public void handle(int index, Player player) {
+        if(items.get(index) != null && items.get(index) instanceof ActionItemStack){
+            ((ActionItemStack)items.get(index)).doAction(player);
+        }
     }
 
     protected class ActionItemStack extends ItemStack {

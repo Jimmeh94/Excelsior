@@ -13,6 +13,8 @@ import excelsior.game.match.gamemodes.Gamemode;
 import excelsior.game.match.gamemodes.GamemodeDuel;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.game.user.UserPlayer;
+import excelsior.utils.PlayerUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,7 +57,7 @@ public class ArenaCommands implements CommandExecutor {
                             return true;
                         }
 
-                        UserPlayer userPlayer = (UserPlayer) ECore.INSTANCE.getUsers().findPlayerInfo(player.getUniqueId()).get();
+                        UserPlayer userPlayer = PlayerUtils.getUserPlayer(Bukkit.getPlayer(player.getUniqueId())).get();
 
                         Gamemode gamemode = new GamemodeDuel(arena.get().getWorld());
                         gamemode.addTeam(new Team(new CombatantProfilePlayer(player.getUniqueId(), userPlayer.getDeck())));

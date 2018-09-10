@@ -1,5 +1,6 @@
 package excelsior.game.match.profiles;
 
+import excelsior.game.cards.CardBase;
 import excelsior.game.cards.Deck;
 import excelsior.game.hotbars.duel.HotbarHand;
 import excelsior.game.match.cards.Hand;

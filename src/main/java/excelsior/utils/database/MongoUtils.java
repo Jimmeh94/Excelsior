@@ -44,7 +44,7 @@ public class MongoUtils {
 
                     Document gridDoc = (Document) document.get("grid");
                     String[] temp = gridDoc.getString("startPos").split(",");
-                    Vector v = new Vector(Double.valueOf(temp[0]), Double.valueOf(temp[1]), Double.valueOf(temp[2]));
+                    Vector v = new Vector(Double.valueOf(temp[0]) + 1, Double.valueOf(temp[1]) + 1, Double.valueOf(temp[2]) + 1);
                     int gx = gridDoc.getInteger("gridX"), gz = gridDoc.getInteger("gridZ");
                     int cx = gridDoc.getInteger("cellX"), cz = gridDoc.getInteger("cellZ");
                     Material gridBorder = Material.valueOf(document.getString("gridBorder"));

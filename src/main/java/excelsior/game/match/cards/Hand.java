@@ -40,4 +40,8 @@ public class Hand {
     public int getSize() {
         return cards.size();
     }
+
+    public List<CardBase> getCards() {
+        return cards;
+    }
 }

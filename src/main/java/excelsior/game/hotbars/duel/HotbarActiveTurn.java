@@ -6,6 +6,8 @@ import excelsior.game.hotbars.Hotbar;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.game.user.UserPlayer;
 import excelsior.game.user.scoreboard.ArenaDefaultPreset;
+import excelsior.utils.PlayerUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,7 +21,7 @@ public class HotbarActiveTurn extends Hotbar {
     public void setHotbar(Player player) {
         super.setHotbar(player);
 
-        UserPlayer user = (UserPlayer) ECore.INSTANCE.getUsers().findPlayerInfo(player.getUniqueId()).get();
+        UserPlayer user = PlayerUtils.getUserPlayer(Bukkit.getPlayer(player.getUniqueId())).get();
         user.changeScoreboardPreset(new ArenaDefaultPreset(player, Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(player).get()));
     }
 
@@ -51,10 +53,12 @@ public class HotbarActiveTurn extends Hotbar {
         action = new ActionItemStack(Material.EMPTY_MAP, new Consumer<Player>() {
             @Override
             public void accept(Player player) {
-                //TODO load deck hotbar
                 //TODO TP player, stop from moving unless deactivated, load maps (cards)
-                CombatantProfilePlayer temp = (CombatantProfilePlayer) Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(player).get().getCombatantProfile(player.getUniqueId()).get();
-                temp.getHotbarHand().setHotbar(player);
+                CombatantProfilePlayer temp = (CombatantProfilePlayer) Excelsior.INSTANCE.getArenaManager()
+                        .findArenaWithPlayer(player).get().getCombatantProfile(player.getUniqueId()).get();
+                UserPlayer userPlayer = PlayerUtils.getUserPlayer(Bukkit.getPlayer(player.getUniqueId())).get();
+                userPlayer.setCurrentHotbar(new HotbarHand(temp));
+                userPlayer.getCurrentHotbar().setHotbar(player);
             }
         });
         meta = action.getItemMeta();
