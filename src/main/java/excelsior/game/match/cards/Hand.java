@@ -44,4 +44,12 @@ public class Hand {
     public List<CardBase> getCards() {
         return cards;
     }
+
+    public void removeCard(int index) {
+        cards.remove(index);
+    }
+
+    public boolean hasCardAt(int index) {
+        return cards.size() - 1 >= index;
+    }
 }

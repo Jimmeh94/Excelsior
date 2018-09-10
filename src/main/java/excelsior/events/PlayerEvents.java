@@ -47,12 +47,12 @@ public class PlayerEvents implements Listener {
 
         if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_ADD){
             if(current instanceof HotbarArenaAdd){
-                current.handle(index, event.getPlayer());
+                current.handle(index, event.getPlayer(), event.getAction());
             }
         }
         else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_DUEL){
             if(current instanceof HotbarActiveTurn || current instanceof HotbarWaitingTurn || current instanceof HotbarHand){
-                current.handle(index, event.getPlayer());
+                current.handle(index, event.getPlayer(), event.getAction());
             }
         } else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.NORMAL){
 

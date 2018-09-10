@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.github.Jimmeh94</groupId>
             <artifactId>ExcelsiorCoreSpigot</artifactId>
-            <version>0.0.1.1g</version>
+            <version>0.0.1.1h</version>
         </dependency>
 
     </dependencies>

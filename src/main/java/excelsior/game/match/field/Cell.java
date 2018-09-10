@@ -1,6 +1,8 @@
 package excelsior.game.match.field;
 
 import ecore.services.ByteColors;
+import ecore.services.location.ServiceLocationUtils;
+import excelsior.game.cards.CardBase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +23,7 @@ public class Cell {
     private Material material;
     private byte data;
     private boolean isAvailable = true;
+    private CardBase occupyingCard;
 
     public Cell(Vector startingPos, int xDem, int zDem, String world, Material material, byte data) {
         this.world = world;
@@ -92,9 +95,7 @@ public class Cell {
     }
 
     public Vector getCenter() {
-        //Assuming that the cell size is odd
-        int size = locations.size();
-        return locations.get((size / 2) + 1);
+        return ServiceLocationUtils.getMiddleLocation(locations.get(0), locations.get(locations.size() - 1));
     }
 
     public boolean isAvailable() {
@@ -103,5 +104,16 @@ public class Cell {
 
     public void setAvailable(boolean b) {
         this.isAvailable = b;
+    }
+
+    public CardBase getOccupyingCard() {
+        return occupyingCard;
+    }
+
+    public void placeCard(CardBase card) {
+        setAvailable(false);
+        occupyingCard = card;
+        occupyingCard.spawn3DRepresentationServer(new Location(Bukkit.getWorld(world), getCenter().getX(),
+                getCenter().getY(), getCenter().getZ()));
     }
 }

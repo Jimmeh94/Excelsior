@@ -7,9 +7,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.UUID;
@@ -138,4 +140,13 @@ public abstract class CardBase {
         connection.sendPacket(equipment);
     }
 
+    public void spawn3DRepresentationServer(Location center) {
+        ArmorStand stand = center.getWorld().spawn(center, ArmorStand.class);
+        stand.setVisible(false);
+        stand.setCustomName(name);
+        stand.setCustomNameVisible(true);
+        stand.setHelmet(new ItemStack(material));
+        stand.setBasePlate(false);
+        stand.setGravity(false);
+    }
 }

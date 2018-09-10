@@ -13,7 +13,10 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class TestCommands implements CommandExecutor {
 
@@ -22,7 +25,7 @@ public class TestCommands implements CommandExecutor {
         Player player = (Player) sender;
 
         if(label.equalsIgnoreCase("test")){
-            if(args.length == 1){
+            if(args.length >= 1){
                 if(args[0].equalsIgnoreCase("grid")){
 
                     Location location = player.getLocation();
@@ -36,6 +39,10 @@ public class TestCommands implements CommandExecutor {
                             Material.STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
 
                     Excelsior.INSTANCE.getArenaManager().add(new Arena(grid, player.getLocation().getWorld().getName()));
+                } else if(args[0].equalsIgnoreCase("remove")){
+                    for(Entity e: player.getLocation().getWorld().getNearbyEntities(player.getLocation(), 50, 50, 50)){
+                        e.remove();
+                    }
                 }
             }
         }
