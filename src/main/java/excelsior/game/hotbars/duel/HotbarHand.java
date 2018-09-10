@@ -1,12 +1,11 @@
 package excelsior.game.hotbars.duel;
 
-import ecore.ECore;
+import ecore.services.hotbar.Hotbar;
+import ecore.services.messages.Message;
+import ecore.services.messages.ServiceMessager;
 import excelsior.Excelsior;
-import excelsior.game.hotbars.Hotbar;
 import excelsior.game.hotbars.Hotbars;
-import excelsior.game.match.profiles.CombatantProfile;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
-import excelsior.game.user.UserPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,6 +49,25 @@ public class HotbarHand extends Hotbar {
             card.setItemMeta(meta);
             addItemWithAction(i, card);
         }
+
+        card = new ActionItemStack(Material.BOOK_AND_QUILL, new Consumer<Player>() {
+            @Override
+            public void accept(Player player) {
+                Message.MessageBuilder builder = Message.builder();
+                builder.addRecipient(player.getUniqueId());
+                builder.addMessage(ChatColor.GRAY + "=====================================");
+                builder.addMessage(" ");
+                builder.addMessageAsChild(ChatColor.GOLD, "Left Click with a card in hand to place it on the field");
+                builder.addMessageAsChild(ChatColor.GOLD, "Right Click with a card in hand to see the details");
+                builder.addMessage(" ");
+                builder.addMessageAsChild(ChatColor.GOLD, "Left/Right Click towards the field to get info about the target area");
+                ServiceMessager.sendMessage(builder.build());
+            }
+        });
+        meta = card.getItemMeta();
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Right Click for Help" + ChatColor.LIGHT_PURPLE + "]");
+        card.setItemMeta(meta);
+        addItemWithAction(7, card);
 
         card = new ActionItemStack(Material.CLAY_BALL, new Consumer<Player>() {
             @Override

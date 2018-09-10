@@ -1,6 +1,6 @@
 package excelsior.game.match.gamemodes;
 
-import ecore.ECore;
+import ecore.services.TimeFormatter;
 import ecore.services.messages.ServiceMessager;
 import excelsior.game.hotbars.Hotbars;
 import excelsior.game.hotbars.duel.HotbarHand;
@@ -12,7 +12,6 @@ import excelsior.game.match.profiles.CombatantProfile;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.game.user.UserPlayer;
 import excelsior.utils.PlayerUtils;
-import excelsior.utils.TimeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

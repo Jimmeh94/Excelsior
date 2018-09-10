@@ -18,7 +18,6 @@ public class Excelsior extends JavaPlugin {
 
     //TODO Make sure title sending works in ECore, look in the Team class at broacastingTurnMessage
     //TODO implement permissions system in ECore, be sure to add to staff chat channel and arena commands
-    //TODO move Hotbar abstract, TimeFormatter, Pair to ECore
 
     public static Excelsior INSTANCE;
 

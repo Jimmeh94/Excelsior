@@ -1,6 +1,6 @@
 package excelsior.game.hotbars.duel;
 
-import excelsior.game.hotbars.Hotbar;
+import ecore.services.hotbar.Hotbar;
 
 public class HotbarWaitingTurn extends Hotbar {
 

@@ -1,8 +1,7 @@
 package excelsior.game.hotbars.duel;
 
-import ecore.ECore;
+import ecore.services.hotbar.Hotbar;
 import excelsior.Excelsior;
-import excelsior.game.hotbars.Hotbar;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.game.user.UserPlayer;
 import excelsior.game.user.scoreboard.ArenaDefaultPreset;
@@ -32,13 +31,13 @@ public class HotbarActiveTurn extends Hotbar {
 
         /**
          * Need a free-cam mode to look around field, look at hand, look at discard pile
-         * 2 = free cam
+         * 2 = use passive
          * 4 = look at hand
          * 6 = discard pile
          * 8 = options menu (skip turn, leave game)
          */
 
-        action = new ActionItemStack(Material.COMPASS, new Consumer<Player>() {
+        action = new ActionItemStack(Material.BLAZE_POWDER, new Consumer<Player>() {
             @Override
             public void accept(Player player) {
                 //TODO activate free-cam mode for player
@@ -46,7 +45,7 @@ public class HotbarActiveTurn extends Hotbar {
             }
         });
         meta = action.getItemMeta();
-        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Free Cam Mode" + ChatColor.LIGHT_PURPLE + "]");
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Use Ability" + ChatColor.LIGHT_PURPLE + "]");
         action.setItemMeta(meta);
         addItemWithAction(2, action);
 
@@ -69,8 +68,7 @@ public class HotbarActiveTurn extends Hotbar {
         action = new ActionItemStack(Material.BARRIER, new Consumer<Player>() {
             @Override
             public void accept(Player player) {
-                //TODO load discard hotbar
-                //TODO load card display
+                //TODO load dyanmic inventory
             }
         });
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Look at Discard Pile" + ChatColor.LIGHT_PURPLE + "]");

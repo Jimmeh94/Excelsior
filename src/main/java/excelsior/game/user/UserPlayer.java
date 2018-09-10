@@ -1,13 +1,13 @@
 package excelsior.game.user;
 
 import ecore.services.economy.EconomyAccount;
+import ecore.services.hotbar.Hotbar;
 import ecore.services.particles.ServiceParticles;
 import ecore.services.scoreboard.Scoreboard;
 import ecore.services.scoreboard.presets.ScoreboardPreset;
 import ecore.services.user.PlayerInfo;
 import excelsior.game.cards.Deck;
 import excelsior.game.cards.decks.DeckDummy;
-import excelsior.game.hotbars.Hotbar;
 import excelsior.game.user.scoreboard.DefaultPreset;
 import org.bukkit.entity.Player;
 

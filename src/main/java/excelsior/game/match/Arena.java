@@ -92,7 +92,7 @@ public class Arena {
         for(Team team: gamemode.getTeams()){
             for(CombatantProfile c: team.getCombatants()){
                 if(c.isPlayer()){
-                    ECore.INSTANCE.getMessager().sendMessage(Bukkit.getPlayer(c.getUUID()), message, prefix);
+                    ServiceMessager.sendMessage(Bukkit.getPlayer(c.getUUID()), message, prefix, true);
                 }
             }
         }

@@ -1,9 +1,9 @@
 package excelsior.events;
 
 import ecore.ECore;
+import ecore.services.hotbar.Hotbar;
 import excelsior.Excelsior;
 import excelsior.game.chatchannels.ChatChannelKeys;
-import excelsior.game.hotbars.Hotbar;
 import excelsior.game.hotbars.HotbarArenaAdd;
 import excelsior.game.hotbars.Hotbars;
 import excelsior.game.hotbars.duel.HotbarActiveTurn;

@@ -1,7 +1,7 @@
 package excelsior.game.cards;
 
-import excelsior.utils.NMSUtils;
-import excelsior.utils.Pair;
+import ecore.services.NMSUtils;
+import ecore.services.Pair;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
