@@ -49,8 +49,8 @@ public class MongoUtils {
                     int cx = gridDoc.getInteger("cellX"), cz = gridDoc.getInteger("cellZ");
                     Material gridBorder = Material.valueOf(document.getString("gridBorder"));
                     Material cellMat = Material.valueOf(document.getString("cellMat"));
-                    byte gridBorderData = (byte)(document.get("gridBorderData"));
-                    byte cellData = (byte) document.get("cellData");
+                    byte gridBorderData = Byte.valueOf(document.getString("gridBorderData"));
+                    byte cellData = Byte.valueOf(document.getString("cellData"));
                     Excelsior.INSTANCE.getArenaManager().add(new Arena(new GridNormal(v, world, gx, gz, cx, cz, false,
                             gridBorder, gridBorderData, cellMat, cellData), world, id));
                 }
@@ -88,9 +88,9 @@ public class MongoUtils {
                                     .append("cellZ", arena.getGrid().getCellZ())
                         )
                         .append("gridBorder", arena.getGrid().getGridBorder().toString())
-                        .append("gridBorderData", arena.getGrid().getGridBorderData())
+                        .append("gridBorderData", String.valueOf(arena.getGrid().getGridBorderData()))
                         .append("cellMat", arena.getGrid().getCellMat().toString())
-                        .append("cellData", arena.getGrid().getCellData())
+                        .append("cellData", String.valueOf(arena.getGrid().getCellData()))
                 );
             }
 

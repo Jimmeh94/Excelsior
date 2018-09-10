@@ -32,12 +32,12 @@ public class GamemodeDuel extends Gamemode {
     }
 
     @Override
-    public int getID() {
-        return 0;
+    public String getName() {
+        return "Duel";
     }
 
     @Override
-    public void start(Vector start) {
-
+    public int getID() {
+        return 0;
     }
 }

@@ -1,12 +1,17 @@
 package excelsior.game.match.gamemodes;
 
+import ecore.ECore;
 import ecore.services.ByteColors;
+import ecore.services.messages.ServiceMessager;
+import excelsior.game.hotbars.Hotbars;
 import excelsior.game.match.Arena;
 import excelsior.game.match.Team;
 import excelsior.game.match.field.Cell;
 import excelsior.game.match.field.Grid;
 import excelsior.game.match.profiles.CombatantProfile;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
+import excelsior.game.user.UserPlayer;
+import excelsior.utils.TimeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,6 +23,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Gamemode {
 
@@ -26,6 +32,8 @@ public abstract class Gamemode {
     private TurnManager turnManager;
     protected String world;
     protected Arena arena;
+    protected Stage gameStage = Stage.PRE_GAME;
+    private int preGameTimeLimit = 5;
 
     public Gamemode(int timeLimit, int timeLimitForEachTurn, String world){
         teams = new ArrayList<>();
@@ -38,6 +46,7 @@ public abstract class Gamemode {
     protected abstract void tick();
     protected abstract void endingGame();
     protected abstract void startingGame();
+    public abstract String getName();
 
     /**
      * ID of the gamemode.
@@ -55,6 +64,7 @@ public abstract class Gamemode {
                 }
             }
         }
+        arena.broadcastMessage(ChatColor.YELLOW + "Countdown will begin in 5 seconds", Optional.of(ServiceMessager.Prefix.DUEL));
         startingGame();
     }
 
@@ -69,6 +79,59 @@ public abstract class Gamemode {
     }
 
     public void baseTick(){
+
+        if(gameStage == Stage.PRE_GAME){
+            //give 5 seconds for orientation
+            //Shuffle decks
+            //shift stage to countdown
+            preGameTimeLimit--;
+            if(preGameTimeLimit == 1){
+                for(Team team: teams){
+                    for(CombatantProfile c: team.getCombatants()){
+                        c.getDeck().shuffleCards();
+                        c.drawHand();
+                        if(c.isPlayer()){
+                            ((CombatantProfilePlayer)c).getHotbarHand().setHotbar(Bukkit.getPlayer(c.getUUID()));
+                        }
+                    }
+                }
+
+                arena.broadcastMessage(ChatColor.YELLOW + "All decks have been shuffled and your hands have been drawn!",
+                        Optional.of(ServiceMessager.Prefix.DUEL));
+
+            } else if(preGameTimeLimit == 0){
+                gameStage = Stage.COUNTDOWN;
+                preGameTimeLimit = 10;
+            }
+
+            if(preGameTimeLimit > 0) {
+                return;
+            }
+
+        } else if(gameStage == Stage.COUNTDOWN){
+            ChatColor color;
+            if(preGameTimeLimit > 6){
+                color = ChatColor.GREEN;
+            } else if(preGameTimeLimit <= 6 && preGameTimeLimit > 3){
+                color = ChatColor.YELLOW;
+            } else {
+                color = ChatColor.RED;
+            }
+            arena.broadcastMessage(color + "The " + getName() + " begins in " + preGameTimeLimit + "s", Optional.of(ServiceMessager.Prefix.DUEL));
+            preGameTimeLimit--;
+
+            if(preGameTimeLimit == 0){
+                gameStage = Stage.IN_GAME;
+                for(Team team: teams){
+                    for(CombatantProfile c: team.getCombatants()){
+                        Hotbars.HOTBAR_WAITING_TURN.setHotbar(Bukkit.getPlayer(c.getUUID()));
+                    }
+                }
+            }
+
+            return;
+        }
+
         timeLimit--;
         if(timeLimit == 0){
             endGame();
@@ -77,6 +140,13 @@ public abstract class Gamemode {
                 if(team.isEmptyOfPlayers()){
                     //TODO if not a PlayerVsAI game or if players don't want them to be repalced by bots
                     //TODO game should end and the other team should win
+                } else {
+                    for(CombatantProfile c: team.getCombatants()){
+                        if(c.isPlayer()){
+                            UserPlayer user = (UserPlayer) ECore.INSTANCE.getUsers().findPlayerInfo(c.getUUID()).get();
+                            user.updateScoreboard();
+                        }
+                    }
                 }
             }
 
@@ -137,6 +207,22 @@ public abstract class Gamemode {
         //TODO do something here. Give option to other players to continue, continue with bot, or leave
     }
 
+    public String getTimeLeftFormatted() {
+        return TimeFormatter.getFormattedTime(timeLimit);
+    }
+
+    public boolean isPlayersTurn(Player owner) {
+        return turnManager.isPlayersTurn(owner);
+    }
+
+    public String getTimeLeftInCurrentTurnFormatted() {
+        return turnManager.getTimeLeftInCurrentTurn();
+    }
+
+    public List<Team> getTeams() {
+        return teams;
+    }
+
 
     protected class TurnManager {
 
@@ -165,9 +251,19 @@ public abstract class Gamemode {
 
             for(Team team: teams){
                 if(team == currentTurn){
-                    continue;
+                    for(CombatantProfile c: team.getCombatants()){
+                        if(c.isPlayer()){
+                            Hotbars.HOTBAR_ACTIVE_TURN.setHotbar(Bukkit.getPlayer(c.getUUID()));
+                        }
+                    }
+                } else {
+                    for(CombatantProfile c: team.getCombatants()){
+                        if(c.isPlayer()){
+                            Hotbars.HOTBAR_WAITING_TURN.setHotbar(Bukkit.getPlayer(c.getUUID()));
+                        }
+                    }
+                    team.broadcastEndTurnMessage(ChatColor.GRAY + "Other team's turn now");
                 }
-                team.broadcastEndTurnMessage(ChatColor.GRAY + "Other team's turn now");
             }
         }
 
@@ -178,6 +274,26 @@ public abstract class Gamemode {
             }
             return false;
         }
+
+        public boolean isPlayersTurn(Player owner) {
+            for(Team team: teams){
+                if(team.isPlayerCombatant(owner) && team == currentTurn){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public String getTimeLeftInCurrentTurn() {
+            return TimeFormatter.getFormattedTime(timeLimitForEachTurn - elapsedTime);
+        }
+    }
+
+    protected enum Stage {
+        PRE_GAME,
+        COUNTDOWN,
+        IN_GAME,
+        POST_GAME
     }
 
 

@@ -3,6 +3,7 @@ package excelsior.events;
 import ecore.ECore;
 import excelsior.Excelsior;
 import excelsior.game.chatchannels.ChatChannelKeys;
+import excelsior.game.hotbars.Hotbars;
 import excelsior.game.user.UserPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,7 @@ public class PlayerEvents implements Listener {
 
         ECore.INSTANCE.getUsers().add(new UserPlayer(event.getPlayer()));
         ECore.INSTANCE.getChannels().findChannel(ChatChannelKeys.GlobalChannel).get().add(event.getPlayer().getUniqueId());
+        Hotbars.HOTBAR_DEFAULT.setHotbar(event.getPlayer());
     }
 
     @EventHandler

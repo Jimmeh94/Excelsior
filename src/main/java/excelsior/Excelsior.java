@@ -3,6 +3,7 @@ package excelsior;
 import ecore.ECore;
 import excelsior.commands.ArenaCommands;
 import excelsior.commands.TestCommands;
+import excelsior.events.ErrorStackEvents;
 import excelsior.events.PlayerEvents;
 import excelsior.game.chatchannels.ChatChannelAuction;
 import excelsior.game.chatchannels.ChatChannelGlobal;
@@ -17,6 +18,7 @@ public class Excelsior extends JavaPlugin {
 
     //TODO Make sure title sending works in ECore, look in the Team class at broacastingTurnMessage
     //TODO implement permissions system in ECore, be sure to add to staff chat channel and arena commands
+    //TODO move Hotbar abstract, TimeFormatter, Pair to ECore
 
     public static Excelsior INSTANCE;
 
@@ -51,6 +53,7 @@ public class Excelsior extends JavaPlugin {
 
     private void registerListeners(){
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
+        getServer().getPluginManager().registerEvents(new ErrorStackEvents(), this);
     }
 
     private void registerCommands(){

@@ -2,14 +2,17 @@ package excelsior.commands;
 
 import ecore.ECore;
 import ecore.services.ByteColors;
+import ecore.services.errors.ErrorStackEntry;
 import ecore.services.messages.ServiceMessager;
 import excelsior.Excelsior;
+import excelsior.game.cards.decks.DeckDummy;
 import excelsior.game.match.Arena;
 import excelsior.game.match.Team;
 import excelsior.game.match.field.GridNormal;
 import excelsior.game.match.gamemodes.Gamemode;
 import excelsior.game.match.gamemodes.GamemodeDuel;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
+import excelsior.game.user.UserPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +33,12 @@ public class ArenaCommands implements CommandExecutor {
 
             if(label.equalsIgnoreCase("arena")){
                 if(args.length > 0){
-                    if(args[0].equalsIgnoreCase("add") && args.length == 5){
+                    if(args[0].equalsIgnoreCase("add")){
+
+                        if(args.length < 5){
+                            ECore.INSTANCE.getErrorStack().add(new ErrorStackEntry(ChatColor.RED + "Use /arena add <x> <z> <cell x> <cell z>", player.getUniqueId()));
+                            return true;
+                        }
 
                         String world = player.getLocation().getWorld().getName();
                         Location location = player.getLocation();
@@ -43,12 +51,14 @@ public class ArenaCommands implements CommandExecutor {
 
                         Optional<Arena> arena = Excelsior.INSTANCE.getArenaManager().getAvailableArena();
                         if(!arena.isPresent()){
-                            ECore.INSTANCE.getMessager().sendMessage(player, ChatColor.RED + "No arena available! Tell staff", Optional.of(ServiceMessager.Prefix.ERROR));
+                            ECore.INSTANCE.getErrorStack().add(new ErrorStackEntry(ChatColor.RED + "No arena available! Tell staff", player.getUniqueId()));
                             return true;
                         }
 
+                        UserPlayer userPlayer = (UserPlayer) ECore.INSTANCE.getUsers().findPlayerInfo(player.getUniqueId()).get();
+
                         Gamemode gamemode = new GamemodeDuel(arena.get().getWorld());
-                        gamemode.addTeam(new Team(new CombatantProfilePlayer(player.getUniqueId())));
+                        gamemode.addTeam(new Team(new CombatantProfilePlayer(player.getUniqueId(), userPlayer.getDeck())));
                         arena.get().start(gamemode);
                     }
                 }

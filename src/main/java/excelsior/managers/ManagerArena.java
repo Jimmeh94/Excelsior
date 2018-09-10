@@ -3,6 +3,7 @@ package excelsior.managers;
 import excelsior.game.match.Arena;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ManagerArena extends Manager<Arena> {
@@ -40,5 +41,14 @@ public class ManagerArena extends Manager<Arena> {
                }
             }
         }
+    }
+
+    public Optional<Arena> findArenaWithPlayer(Player player) {
+        for(Arena arena: objects){
+            if(arena.isPlayerCombatant(player)){
+                return Optional.of(arena);
+            }
+        }
+        return Optional.empty();
     }
 }

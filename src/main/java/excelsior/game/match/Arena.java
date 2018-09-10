@@ -1,7 +1,13 @@
 package excelsior.game.match;
 
+import ecore.ECore;
+import ecore.services.messages.ServiceMessager;
 import excelsior.game.match.field.Grid;
 import excelsior.game.match.gamemodes.Gamemode;
+import excelsior.game.match.profiles.CombatantProfile;
+import excelsior.game.match.profiles.CombatantProfilePlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -80,5 +86,26 @@ public class Arena {
 
     public void playerQuit(Player player) {
         gamemode.playerQuit(player);
+    }
+
+    public void broadcastMessage(String message, Optional<ServiceMessager.Prefix> prefix){
+        for(Team team: gamemode.getTeams()){
+            for(CombatantProfile c: team.getCombatants()){
+                if(c.isPlayer()){
+                    ECore.INSTANCE.getMessager().sendMessage(Bukkit.getPlayer(c.getUUID()), message, prefix);
+                }
+            }
+        }
+    }
+
+    public Optional<CombatantProfile> getCombatantProfile(UUID uniqueId) {
+        for(Team team: gamemode.getTeams()){
+            for(CombatantProfile c: team.getCombatants()){
+                if(c.getUUID().compareTo(uniqueId) == 0){
+                    return Optional.of(c);
+                }
+            }
+        }
+        return Optional.empty();
     }
 }
