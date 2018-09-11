@@ -63,11 +63,8 @@ public class PlayerEvents implements Listener {
                     current.handle(index, event.getPlayer(), event.getAction());
                 }
             }
-            else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_DUEL){
-                if(current instanceof HotbarActiveTurn || current instanceof HotbarWaitingTurn || current instanceof HotbarHand ||
-                        current instanceof HotbarCardDescription){
-                    current.handle(index, event.getPlayer(), event.getAction());
-                }
+            else if(Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(event.getPlayer()).isPresent() && Hotbars.isArenaDuelHotbar(current)){
+                current.handle(index, event.getPlayer(), event.getAction());
             }
         }
 

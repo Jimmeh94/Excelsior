@@ -1,6 +1,7 @@
 package excelsior.game.cards.cards;
 
 import excelsior.game.cards.CardBase;
+import excelsior.game.cards.CardMovementDiagonal;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class CardDummyThree extends CardBase {
 
     public CardDummyThree(UUID owner) {
-        super(owner, 1, "Dummy 3 Card", Material.DIAMOND_HELMET, (short)1.0);
+        super(owner, 1, "Dummy 3 Card", Material.DIAMOND_HELMET, (short)1.0, new CardMovementDiagonal(2));
     }
 
     @Override

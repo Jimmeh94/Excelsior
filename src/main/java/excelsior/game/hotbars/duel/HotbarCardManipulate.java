@@ -5,7 +5,9 @@ import ecore.services.messages.Message;
 import ecore.services.messages.ServiceMessager;
 import excelsior.Excelsior;
 import excelsior.game.cards.CardBase;
+import excelsior.game.hotbars.Hotbars;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
+import excelsior.game.user.UserPlayer;
 import excelsior.utils.PlayerUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,17 +15,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.meta.ItemMeta;
 
-/**
- * This hotbar is for when a player is viewing a card from their hand
- */
-public class HotbarCardDescription extends Hotbar {
+public class HotbarCardManipulate extends Hotbar {
 
     private CardBase cardBase;
-    private Hotbar previous;
 
-    public HotbarCardDescription(CardBase cardBase, Hotbar previous) {
+    public HotbarCardManipulate(CardBase cardBase) {
         this.cardBase = cardBase;
-        this.previous = previous;
 
         setupItems();
     }
@@ -36,6 +33,17 @@ public class HotbarCardDescription extends Hotbar {
 
         ActionItemStack card;
         ItemMeta meta;
+
+        card = new ActionItemStack(Material.WRITTEN_BOOK, new ActionItemStack.Callback() {
+            @Override
+            public void action(Player player, Action action) {
+                //Activate card passive ability
+            }
+        });
+        meta = card.getItemMeta();
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Right Click to use Card Ability" + ChatColor.LIGHT_PURPLE + "]");
+        card.setItemMeta(meta);
+        addItem(1, card);
 
 
         card = new ActionItemStack(Material.WRITTEN_BOOK, new ActionItemStack.Callback() {
@@ -59,18 +67,18 @@ public class HotbarCardDescription extends Hotbar {
         meta = card.getItemMeta();
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Right Click for Card Info" + ChatColor.LIGHT_PURPLE + "]");
         card.setItemMeta(meta);
-        addItem(3, card);
+        addItem(6, card);
 
         card = new ActionItemStack(Material.CLAY_BALL, new ActionItemStack.Callback() {
             @Override
             public void action(Player player, Action action) {
-                previous.setHotbar(player);
-                PlayerUtils.getCombatProfilePlayer(player.getUniqueId()).get().setViewingClientArmorstand(null);
+                Hotbars.HOTBAR_ACTIVE_TURN.setHotbar(player);
+                PlayerUtils.getUserPlayer(player.getUniqueId()).get().setPlayerMode(UserPlayer.PlayerMode.ARENA_DUEL_DEFAULT);
             }
         });
         meta = card.getItemMeta();
-        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Return to Previous Hotbar" + ChatColor.LIGHT_PURPLE + "]");
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Return to Duel Menu" + ChatColor.LIGHT_PURPLE + "]");
         card.setItemMeta(meta);
-        addItem(6, card);
+        addItem(8, card);
     }
 }

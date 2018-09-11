@@ -47,14 +47,32 @@ public class HotbarActiveTurn extends Hotbar {
         meta = action.getItemMeta();
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Use Ability" + ChatColor.LIGHT_PURPLE + "]");
         action.setItemMeta(meta);
+        addItemWithAction(0, action);
+
+        action = new ActionItemStack(Material.IRON_BOOTS, new ActionItemStack.Callback() {
+            @Override
+            public void action(Player player, Action action) {
+                //Needs to be aiming at a cell with a card owned by this player
+                //Brings up hotbar about that card
+                CombatantProfilePlayer cpp = PlayerUtils.getCombatProfilePlayer(player.getUniqueId()).get();
+                if(cpp.getCurrentAim() == null || cpp.getCurrentAim().getOccupyingCard() == null){
+                    return;
+                }
+
+                (new HotbarCardManipulate(cpp.getCurrentAim().getOccupyingCard())).setHotbar(player);
+                PlayerUtils.getUserPlayer(player.getUniqueId()).get().setPlayerMode(UserPlayer.PlayerMode.ARENA_MOVING_CARD);
+            }
+        });
+        meta = action.getItemMeta();
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "[" + ChatColor.GRAY + "Move a Card" + ChatColor.LIGHT_PURPLE + "]");
+        action.setItemMeta(meta);
         addItemWithAction(2, action);
 
         action = new ActionItemStack(Material.EMPTY_MAP, new ActionItemStack.Callback() {
             @Override
             public void action(Player player, Action action) {
-                //TODO TP player, stop from moving unless deactivated, load maps (cards)
-                CombatantProfilePlayer temp = (CombatantProfilePlayer) Excelsior.INSTANCE.getArenaManager()
-                        .findArenaWithPlayer(player).get().getCombatantProfile(player.getUniqueId()).get();
+
+                CombatantProfilePlayer temp = PlayerUtils.getCombatProfilePlayer(player.getUniqueId()).get();
                 UserPlayer userPlayer = PlayerUtils.getUserPlayer(Bukkit.getPlayer(player.getUniqueId())).get();
                 userPlayer.setCurrentHotbar(new HotbarHand(temp));
                 userPlayer.getCurrentHotbar().setHotbar(player);

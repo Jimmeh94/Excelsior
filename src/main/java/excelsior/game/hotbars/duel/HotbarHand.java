@@ -10,6 +10,7 @@ import excelsior.game.match.field.Cell;
 import excelsior.game.match.gamemodes.Gamemode;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.game.user.UserPlayer;
+import excelsior.utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -61,8 +62,7 @@ public class HotbarHand extends Hotbar {
 
                     if(action == Action.LEFT_CLICK_AIR) {
                         //Lay card on field
-                        Cell currentAim = ((CombatantProfilePlayer) Excelsior.INSTANCE.getArenaManager()
-                                .findArenaWithPlayer(player).get().getCombatantProfile(player.getUniqueId()).get()).getCurrentAim();
+                        Cell currentAim = PlayerUtils.getCombatProfilePlayer(player.getUniqueId()).get().getCurrentAim();
 
                         if (currentAim != null && currentAim.isAvailable() && profile.getHand().hasCardAt(index)) {
                             currentAim.placeCard(profile.getHand().getCard(index));

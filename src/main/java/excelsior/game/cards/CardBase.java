@@ -5,6 +5,7 @@ import ecore.services.Pair;
 import excelsior.Excelsior;
 import excelsior.game.match.field.Cell;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
+import excelsior.utils.PlayerUtils;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -164,8 +165,7 @@ public abstract class CardBase {
         connection.sendPacket(packet);
         connection.sendPacket(equipment);
 
-        ((CombatantProfilePlayer)Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(player).get().getCombatantProfile(owner).get())
-                .setViewingClientArmorstand(new CombatantProfilePlayer.ViewingClientArmorstand(clientArmorStand.getFirst(), owner));
+        PlayerUtils.getCombatProfilePlayer(owner).get().setViewingClientArmorstand(new CombatantProfilePlayer.ViewingClientArmorstand(clientArmorStand.getFirst(), owner));
     }
 
     public void spawn3DRepresentationServer(Location center) {
@@ -176,5 +176,13 @@ public abstract class CardBase {
         stand.setHelmet(new ItemStack(material));
         stand.setBasePlate(false);
         stand.setGravity(false);
+    }
+
+    public CardMovement getMovement() {
+        return cardMovement;
+    }
+
+    public boolean isOwner(UUID uniqueId) {
+        return uniqueId.compareTo(owner) == 0;
     }
 }

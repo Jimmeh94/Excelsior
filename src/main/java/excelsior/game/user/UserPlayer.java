@@ -1,14 +1,17 @@
 package excelsior.game.user;
 
+import ecore.events.CustomEvent;
 import ecore.services.economy.EconomyAccount;
 import ecore.services.hotbar.Hotbar;
 import ecore.services.particles.ServiceParticles;
 import ecore.services.scoreboard.Scoreboard;
 import ecore.services.scoreboard.presets.ScoreboardPreset;
 import ecore.services.user.PlayerInfo;
+import excelsior.events.custom.PlayerModeChangeEvent;
 import excelsior.game.cards.Deck;
 import excelsior.game.cards.decks.DeckDummy;
 import excelsior.game.user.scoreboard.DefaultPreset;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class UserPlayer extends PlayerInfo {
@@ -38,6 +41,7 @@ public class UserPlayer extends PlayerInfo {
     }
 
     public void setPlayerMode(PlayerMode playerMode) {
+        Bukkit.getPluginManager().callEvent(new PlayerModeChangeEvent(CustomEvent.SERVER_CAUSE, this.playerMode, playerMode, getPlayer()));
         this.playerMode = playerMode;
     }
 
@@ -66,7 +70,10 @@ public class UserPlayer extends PlayerInfo {
      */
     public enum PlayerMode{
         ARENA_ADD,
-        ARENA_DUEL,
-        NORMAL
+        ARENA_DUEL_DEFAULT,
+        ARENA_VIEWING_CARD_INFO,
+        ARENA_MOVING_CARD,
+
+        NORMAL;
     }
 }

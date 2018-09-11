@@ -60,7 +60,7 @@ public abstract class Gamemode {
         for(Team team: teams){
             for(CombatantProfile p: team.getCombatants()){
                 if(p.isPlayer()){
-                    PlayerUtils.getUserPlayer(Bukkit.getPlayer(p.getUUID())).get().setPlayerMode(UserPlayer.PlayerMode.ARENA_DUEL);
+                    PlayerUtils.getUserPlayer(Bukkit.getPlayer(p.getUUID())).get().setPlayerMode(UserPlayer.PlayerMode.ARENA_DUEL_DEFAULT);
                     Bukkit.getPlayer(p.getUUID()).teleport(new Location(Bukkit.getWorld(world), start.getX(), start.getY(), start.getZ()));
                 }
             }
@@ -181,24 +181,45 @@ public abstract class Gamemode {
         for(Team team: teams){
             for(CombatantProfile p: team.getCombatants()){
                 if(p.isPlayer()){
-                    CombatantProfilePlayer cpp = (CombatantProfilePlayer)p;
+                    UserPlayer.PlayerMode mode = PlayerUtils.getUserPlayer(p.getUUID()).get().getPlayerMode();
+                    CombatantProfilePlayer cpp = (CombatantProfilePlayer) p;
                     Player player = Bukkit.getPlayer(p.getUUID());
+
+                    //Update their aim
                     BlockIterator it = new BlockIterator(player.getEyeLocation(), 0, 100);
-                    while(it.hasNext()){
+                    Cell newAim = null;
+                    while (it.hasNext()) {
                         Block block = it.next();
-                        if(block.getType() != Material.AIR){
-                            if(grid.isCell(block.getLocation().toVector())){
-                                Cell cell = grid.getCell(block.getLocation().toVector()).get();
-                                if(cpp.getCurrentAim() != null && cpp.getCurrentAim() == cell){
-                                    continue;
-                                }
-                                if(cpp.getCurrentAim() != null) {
-                                    cpp.getCurrentAim().clearAimForPlayer(player);
-                                }
-                                cpp.setCurrentAim(cell);
-                                cpp.getCurrentAim().drawAimForPlayer(player);
+                        if (block.getType() != Material.AIR) {
+                            if (grid.isCell(block.getLocation().toVector())) {
+                                newAim = grid.getCell(block.getLocation().toVector()).get();
                             }
                         }
+                    }
+
+                    if(mode == UserPlayer.PlayerMode.ARENA_DUEL_DEFAULT) {
+                        //Make sure targeting retcile needs to appear
+                        if (cpp.getCurrentAim() != null && cpp.getCurrentAim() == newAim) {
+                            continue;
+                        }
+                        if (cpp.getCurrentAim() != null) {
+                            cpp.getCurrentAim().clearAimForPlayer(player);
+                        }
+                        cpp.setCurrentAim(newAim);
+
+                        if(cpp.getCurrentAim() != null) {
+                            cpp.getCurrentAim().drawAimForPlayer(player);
+                        }
+
+                    } else if(mode == UserPlayer.PlayerMode.ARENA_MOVING_CARD){
+                        //We only want to highlight a cell that the card can move to
+
+                        cpp.setCurrentAim(newAim);
+
+                    } else if(mode == UserPlayer.PlayerMode.ARENA_VIEWING_CARD_INFO){
+
+                        cpp.setCurrentAim(newAim);
+
                     }
                 }
             }
@@ -245,12 +266,7 @@ public abstract class Gamemode {
 
     public void handlePlayerRightEmptyClick() {
         /**
-         * If current turn and cell is occupied:
-         * a) If player's card, brings up movement hotbar
-         * b) If enemy's/teammate's card, brings up info
-         *
-         * If not current turn and cell is occupied:
-         * Brings up info
+         * Should bring up info about that cell and the occupying card if there
          */
     }
 

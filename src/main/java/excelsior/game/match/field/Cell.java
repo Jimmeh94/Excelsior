@@ -24,6 +24,7 @@ public class Cell {
     private byte data;
     private boolean isAvailable = true;
     private CardBase occupyingCard;
+    private Vector center;
 
     public Cell(Vector startingPos, int xDem, int zDem, String world, Material material, byte data) {
         this.world = world;
@@ -43,6 +44,8 @@ public class Cell {
             }
             z = startingPos.getBlockZ();
         }
+
+        center = ServiceLocationUtils.getMiddleLocation(locations.get(0), locations.get(locations.size() - 1));
     }
 
     public boolean isWithinCell(Vector check){
@@ -95,7 +98,7 @@ public class Cell {
     }
 
     public Vector getCenter() {
-        return ServiceLocationUtils.getMiddleLocation(locations.get(0), locations.get(locations.size() - 1));
+        return center;
     }
 
     public boolean isAvailable() {
@@ -115,5 +118,13 @@ public class Cell {
         occupyingCard = card;
         occupyingCard.spawn3DRepresentationServer(new Location(Bukkit.getWorld(world), getCenter().getX(),
                 getCenter().getY(), getCenter().getZ()));
+        occupyingCard.setCurrentCell(this);
+    }
+
+    public void drawAvailableSpaceForPlayer(Player player) {
+        for(Vector v: getVectors()){
+            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
+                    Material.STAINED_GLASS, ByteColors.BLUE);
+        }
     }
 }

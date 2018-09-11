@@ -1,9 +1,14 @@
 package excelsior.game.match.field;
 
 import ecore.services.ByteColors;
+import excelsior.game.cards.CardBase;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.material.Directional;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -47,8 +52,11 @@ public abstract class Grid {
         }
     }
 
-    public Optional<Cell> getCellInDirection(Cell current, Vector distance){
-        Vector target = current.getCenter().clone().add(distance);
+    public Optional<Cell> getCellInDirection(Cell current, Vector direction){
+        direction.setX(direction.getX() * ((cellDemX * direction.getX()) + (1 * direction.getX())));
+        direction.setZ(direction.getZ() * ((cellDemZ * direction.getZ()) + (1 * direction.getZ())));
+
+        Vector target = current.getCenter().clone().add(direction);
         if(isCell(target)){
             return getCell(target);
         }
@@ -150,6 +158,20 @@ public abstract class Grid {
     public void resetCells() {
         for(Cell cell: cells){
             cell.setAvailable(true);
+        }
+    }
+
+    public void displayAvailableCellsToMoveTo(CardBase cardBase) {
+        List<Cell> cells = cardBase.getMovement().getAvailableSpaces();
+        cardBase.getMovement().setCurrentlyHighlighed(cells);
+        for(Cell cell: cells){
+            cell.drawAvailableSpaceForPlayer(Bukkit.getPlayer(cardBase.getOwner()));
+        }
+    }
+
+    public void eraseAvailableCellsToMoveTo(CardBase cardBase){
+        for(Cell cell: cells){
+            cell.clearAimForPlayer(Bukkit.getPlayer(cardBase.getOwner()));
         }
     }
 }

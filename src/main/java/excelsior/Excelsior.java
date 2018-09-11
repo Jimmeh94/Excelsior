@@ -5,6 +5,7 @@ import excelsior.commands.ArenaCommands;
 import excelsior.commands.TestCommands;
 import excelsior.events.ErrorStackEvents;
 import excelsior.events.PlayerEvents;
+import excelsior.events.PlayerModeEvents;
 import excelsior.game.chatchannels.ChatChannelAuction;
 import excelsior.game.chatchannels.ChatChannelGlobal;
 import excelsior.game.chatchannels.ChatChannelStaff;
@@ -68,6 +69,7 @@ public class Excelsior extends JavaPlugin {
     private void registerListeners(){
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         getServer().getPluginManager().registerEvents(new ErrorStackEvents(), this);
+        getServer().getPluginManager().registerEvents(new PlayerModeEvents(), this);
     }
 
     private void registerCommands(){
