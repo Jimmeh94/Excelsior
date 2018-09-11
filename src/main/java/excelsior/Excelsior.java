@@ -19,6 +19,7 @@ public class Excelsior extends JavaPlugin {
     //TODO Make sure title sending works in ECore, look in the Team class at broacastingTurnMessage
     //TODO implement permissions system in ECore, be sure to add to staff chat channel and arena commands
     //TODO store all amorstands in manager and delete on server shutdown and arena end game
+    //TODO make despawn method for NMSUtils rather than in CardBase and ManagerClientArmorstand
 
     public static Excelsior INSTANCE;
 

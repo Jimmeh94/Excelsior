@@ -2,6 +2,8 @@ package excelsior.game.cards;
 
 import ecore.services.NMSUtils;
 import ecore.services.Pair;
+import excelsior.Excelsior;
+import excelsior.game.match.profiles.CombatantProfilePlayer;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,12 +40,14 @@ public abstract class CardBase {
         generateItemStack();
     }
 
+    protected abstract List<String> generateLore();
+
     public void generateItemStack(){
         mesh = new ItemStack(material);
         mesh.setDurability(materialDamageValue);
-        //TODO set lore
         ItemMeta meta = mesh.getItemMeta();
         meta.setDisplayName(name);
+        meta.setLore(generateLore());
         mesh.setItemMeta(meta);
     }
 
@@ -126,11 +131,18 @@ public abstract class CardBase {
             return;
         }
 
+        if(clientArmorStand != null && clientArmorStand.getFirst() != null){
+            PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(clientArmorStand.getFirst().getId());
+            NMSUtils.getPlayerConnection(player).sendPacket(packet);
+        }
+
         description = new EntityArmorStand(((CraftWorld)location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ());
         description.setInvisible(true);
         description.setBasePlate(false);
         description.setCustomName(name);
         description.setCustomNameVisible(true);
+
+        clientArmorStand = new Pair<>(description, Arrays.asList(owner));
 
         PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving(clientArmorStand.getFirst());
         PacketPlayOutEntityEquipment equipment = new PacketPlayOutEntityEquipment(clientArmorStand.getFirst().getId(), EnumItemSlot.HEAD, NMSUtils.getNMSCopy(mesh));
@@ -138,6 +150,9 @@ public abstract class CardBase {
         PlayerConnection connection = NMSUtils.getPlayerConnection(player);
         connection.sendPacket(packet);
         connection.sendPacket(equipment);
+
+        ((CombatantProfilePlayer)Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(player).get().getCombatantProfile(owner).get())
+                .setViewingClientArmorstand(new CombatantProfilePlayer.ViewingClientArmorstand(clientArmorStand.getFirst(), owner));
     }
 
     public void spawn3DRepresentationServer(Location center) {

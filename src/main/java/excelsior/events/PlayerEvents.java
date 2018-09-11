@@ -7,6 +7,7 @@ import excelsior.game.chatchannels.ChatChannelKeys;
 import excelsior.game.hotbars.HotbarArenaAdd;
 import excelsior.game.hotbars.Hotbars;
 import excelsior.game.hotbars.duel.HotbarActiveTurn;
+import excelsior.game.hotbars.duel.HotbarCardDescription;
 import excelsior.game.hotbars.duel.HotbarHand;
 import excelsior.game.hotbars.duel.HotbarWaitingTurn;
 import excelsior.game.user.UserPlayer;
@@ -15,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerEvents implements Listener {
@@ -51,12 +53,12 @@ public class PlayerEvents implements Listener {
             }
         }
         else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_DUEL){
-            if(current instanceof HotbarActiveTurn || current instanceof HotbarWaitingTurn || current instanceof HotbarHand){
+            if(current instanceof HotbarActiveTurn || current instanceof HotbarWaitingTurn || current instanceof HotbarHand ||
+                current instanceof HotbarCardDescription){
                 current.handle(index, event.getPlayer(), event.getAction());
             }
         } else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.NORMAL){
 
         }
     }
-
 }

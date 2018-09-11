@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -41,7 +42,9 @@ public class TestCommands implements CommandExecutor {
                     Excelsior.INSTANCE.getArenaManager().add(new Arena(grid, player.getLocation().getWorld().getName()));
                 } else if(args[0].equalsIgnoreCase("remove")){
                     for(Entity e: player.getLocation().getWorld().getNearbyEntities(player.getLocation(), 50, 50, 50)){
-                        e.remove();
+                        if(e instanceof ArmorStand) {
+                            e.remove();
+                        }
                     }
                 }
             }

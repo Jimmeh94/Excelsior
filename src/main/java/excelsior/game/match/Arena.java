@@ -112,4 +112,5 @@ public class Arena {
     public boolean isPlayersTurn(Player player) {
         return gamemode.isPlayersTurn(player);
     }
+
 }

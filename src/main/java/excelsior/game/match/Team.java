@@ -3,7 +3,9 @@ package excelsior.game.match;
 import ecore.ECore;
 import ecore.services.messages.ServiceMessager;
 import ecore.services.messages.messagers.TitleMessager;
+import excelsior.game.hotbars.duel.HotbarHand;
 import excelsior.game.match.profiles.CombatantProfile;
+import excelsior.game.match.profiles.CombatantProfilePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -77,6 +79,18 @@ public class Team {
         for(CombatantProfile c: combatants){
             if(c.isPlayer() && c.getUUID().compareTo(player.getUniqueId()) == 0){
                 combatants.remove(c);
+            }
+        }
+    }
+
+    public void drawCard() {
+        for(CombatantProfile c: combatants){
+            if(c.getHand().canDrawCard()){
+                c.getHand().addCard(c.getDeck().getNextCard(true));
+                if(c.isPlayer()){
+                    //This will update the player's hand
+                    (new HotbarHand((CombatantProfilePlayer)c)).setHotbar(Bukkit.getPlayer(c.getUUID()));
+                }
             }
         }
     }

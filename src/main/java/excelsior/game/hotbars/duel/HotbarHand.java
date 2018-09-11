@@ -1,17 +1,23 @@
 package excelsior.game.hotbars.duel;
 
+import ecore.ECore;
 import ecore.services.hotbar.Hotbar;
 import ecore.services.messages.Message;
 import ecore.services.messages.ServiceMessager;
 import excelsior.Excelsior;
 import excelsior.game.hotbars.Hotbars;
 import excelsior.game.match.field.Cell;
+import excelsior.game.match.gamemodes.Gamemode;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
+import excelsior.game.user.UserPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
 
@@ -44,8 +50,15 @@ public class HotbarHand extends Hotbar {
             card = new ActionItemStack(profile.getHand().viewCard(i).getMesh().getType(), new ActionItemStack.Callback() {
                 @Override
                 public void action(Player player, Action action) {
+                    if(Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(player).get().getGamemode().getStage()
+                            != Gamemode.Stage.IN_GAME){
+                        return;
+                    }
+
+                    int index = player.getInventory().getHeldItemSlot();
+
                     if(action == Action.LEFT_CLICK_AIR) {
-                        int index = player.getInventory().getHeldItemSlot();
+                        //Lay card on field
                         Cell currentAim = ((CombatantProfilePlayer) Excelsior.INSTANCE.getArenaManager()
                                 .findArenaWithPlayer(player).get().getCombatantProfile(player.getUniqueId()).get()).getCurrentAim();
 
@@ -54,7 +67,17 @@ public class HotbarHand extends Hotbar {
                             player.getInventory().clear(index);
                         }
                     } else if(action == Action.RIGHT_CLICK_AIR){
+                        //Display client side in front of player
+                        if(profile.getHand().hasCardAt(index)){
+                            Location display = player.getLocation().clone();
+                            Vector direction = display.getDirection();
+                            display.add(2 * direction.getX(), 0, 2 * direction.getZ());
+                            profile.getHand().viewCard(index).displayCardDescription(display);
 
+                            UserPlayer userPlayer = (UserPlayer) ECore.INSTANCE.getUsers().findPlayerInfo(player.getUniqueId()).get();
+                            HotbarCardDescription hotbar = new HotbarCardDescription(profile.getHand().viewCard(index), userPlayer.getCurrentHotbar());
+                            hotbar.setHotbar(player);
+                        }
                     }
                 }
             });
@@ -63,7 +86,7 @@ public class HotbarHand extends Hotbar {
             addItemWithAction(i, card);
         }
 
-        card = new ActionItemStack(Material.BOOK_AND_QUILL, new ActionItemStack.Callback() {
+        card = new ActionItemStack(Material.WRITTEN_BOOK, new ActionItemStack.Callback() {
             @Override
             public void action(Player player, Action action) {
                 Message.MessageBuilder builder = Message.builder();

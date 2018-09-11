@@ -239,6 +239,10 @@ public abstract class Gamemode {
         return teams;
     }
 
+    public Stage getStage() {
+        return gameStage;
+    }
+
 
     protected class TurnManager {
 
@@ -262,7 +266,7 @@ public abstract class Gamemode {
                 }
             }
             elapsedTime = 0;
-
+            currentTurn.drawCard();
             currentTurn.broadcastStartTurnMessage();
 
             for(Team team: teams){
@@ -305,7 +309,7 @@ public abstract class Gamemode {
         }
     }
 
-    protected enum Stage {
+    public enum Stage {
         PRE_GAME,
         COUNTDOWN,
         IN_GAME,
