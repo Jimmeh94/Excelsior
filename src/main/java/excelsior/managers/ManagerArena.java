@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ManagerArena extends Manager<Arena> {
 
@@ -54,6 +55,15 @@ public class ManagerArena extends Manager<Arena> {
                }
             }
         }
+    }
+
+    public Optional<Arena> findArenaWithCombatant(UUID uuid){
+        for(Arena arena: objects){
+            if(arena.isCombatant(uuid)){
+                return Optional.of(arena);
+            }
+        }
+        return Optional.empty();
     }
 
     public Optional<Arena> findArenaWithPlayer(Player player) {

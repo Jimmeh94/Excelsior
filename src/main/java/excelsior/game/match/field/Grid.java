@@ -47,6 +47,14 @@ public abstract class Grid {
         }
     }
 
+    public Optional<Cell> getCellInDirection(Cell current, Vector distance){
+        Vector target = current.getCenter().clone().add(distance);
+        if(isCell(target)){
+            return getCell(target);
+        }
+        return Optional.empty();
+    }
+
     public void drawGrid(){
         for(Cell cell: cells){
             cell.drawCell();

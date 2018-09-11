@@ -85,8 +85,7 @@ public class Team {
 
     public void drawCard() {
         for(CombatantProfile c: combatants){
-            if(c.getHand().canDrawCard()){
-                c.getHand().addCard(c.getDeck().getNextCard(true));
+            if(c.drawCard()){
                 if(c.isPlayer()){
                     //This will update the player's hand
                     (new HotbarHand((CombatantProfilePlayer)c)).setHotbar(Bukkit.getPlayer(c.getUUID()));

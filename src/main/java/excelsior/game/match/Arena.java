@@ -2,6 +2,7 @@ package excelsior.game.match;
 
 import ecore.ECore;
 import ecore.services.messages.ServiceMessager;
+import excelsior.game.match.field.Cell;
 import excelsior.game.match.field.Grid;
 import excelsior.game.match.gamemodes.Gamemode;
 import excelsior.game.match.profiles.CombatantProfile;
@@ -10,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -113,4 +115,18 @@ public class Arena {
         return gamemode.isPlayersTurn(player);
     }
 
+    public boolean isCombatant(UUID uuid) {
+        for(Team team: gamemode.getTeams()){
+            for(CombatantProfile c: team.getCombatants()){
+                if(c.getUUID().compareTo(uuid) == 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void handlePlayerRightEmptyClick() {
+        gamemode.handlePlayerRightEmptyClick();
+    }
 }

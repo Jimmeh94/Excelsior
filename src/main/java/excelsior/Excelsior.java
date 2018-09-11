@@ -12,6 +12,10 @@ import excelsior.managers.ManagerArena;
 import excelsior.runnables.TimerArena;
 import excelsior.runnables.TimerDirectionalAimArenas;
 import excelsior.utils.database.MongoUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Excelsior extends JavaPlugin {
@@ -19,7 +23,8 @@ public class Excelsior extends JavaPlugin {
     //TODO Make sure title sending works in ECore, look in the Team class at broacastingTurnMessage
     //TODO implement permissions system in ECore, be sure to add to staff chat channel and arena commands
     //TODO store all amorstands in manager and delete on server shutdown and arena end game
-    //TODO make despawn method for NMSUtils rather than in CardBase and ManagerClientArmorstand
+    //TODO make despawn method for NMSUtils rather than in CardBase and HotbarCardDescription
+    //TODO make sure hand doesn't go above 6 cards
 
     public static Excelsior INSTANCE;
 
@@ -46,6 +51,14 @@ public class Excelsior extends JavaPlugin {
 
     @Override
     public void onDisable(){
+
+        for(World w: Bukkit.getWorlds()){
+            for(Entity e: w.getEntities()){
+                if(e instanceof ArmorStand){
+                    e.remove();
+                }
+            }
+        }
 
         MongoUtils.writeArenas();
 

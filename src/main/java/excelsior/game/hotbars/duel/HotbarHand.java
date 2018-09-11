@@ -42,6 +42,8 @@ public class HotbarHand extends Hotbar {
             return;
         }
 
+        clearItems();
+
         ActionItemStack card;
         ItemMeta meta;
 
@@ -65,6 +67,7 @@ public class HotbarHand extends Hotbar {
                         if (currentAim != null && currentAim.isAvailable() && profile.getHand().hasCardAt(index)) {
                             currentAim.placeCard(profile.getHand().getCard(index));
                             player.getInventory().clear(index);
+                            setHotbar(player);
                         }
                     } else if(action == Action.RIGHT_CLICK_AIR){
                         //Display client side in front of player

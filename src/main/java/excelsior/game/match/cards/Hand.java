@@ -25,7 +25,7 @@ public class Hand {
     }
 
     public boolean canDrawCard(){
-        return cards.size() <= 6;
+        return cards.size() < 6;
     }
 
     public CardBase viewCard(int index){
@@ -50,6 +50,6 @@ public class Hand {
     }
 
     public boolean hasCardAt(int index) {
-        return cards.size() - 1 >= index;
+        return cards.get(index) != null;
     }
 }

@@ -243,6 +243,17 @@ public abstract class Gamemode {
         return gameStage;
     }
 
+    public void handlePlayerRightEmptyClick() {
+        /**
+         * If current turn and cell is occupied:
+         * a) If player's card, brings up movement hotbar
+         * b) If enemy's/teammate's card, brings up info
+         *
+         * If not current turn and cell is occupied:
+         * Brings up info
+         */
+    }
+
 
     protected class TurnManager {
 

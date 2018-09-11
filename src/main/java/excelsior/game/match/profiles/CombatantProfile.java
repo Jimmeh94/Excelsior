@@ -32,8 +32,12 @@ public abstract class CombatantProfile {
         }
     }
 
-    public void drawCard(){
-        hand.addCard(deck.getNextCard(true));
+    public boolean drawCard(){
+        if(hand.canDrawCard()) {
+            hand.addCard(deck.getNextCard(true));
+            return true;
+        }
+        return false;
     }
 
     public Deck getDeck() {

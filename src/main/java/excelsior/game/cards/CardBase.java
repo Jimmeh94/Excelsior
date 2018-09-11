@@ -3,6 +3,7 @@ package excelsior.game.cards;
 import ecore.services.NMSUtils;
 import ecore.services.Pair;
 import excelsior.Excelsior;
+import excelsior.game.match.field.Cell;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
@@ -29,18 +30,30 @@ public abstract class CardBase {
     private Material material;
     private short materialDamageValue;
     private ItemStack mesh;
+    private Cell currentCell;
+    private CardMovement cardMovement;
 
-    public CardBase(UUID owner, double level, String name, Material material, short materialDamageValue) {
+    public CardBase(UUID owner, double level, String name, Material material, short materialDamageValue, CardMovement cardMovement) {
         this.owner = owner;
         this.level = level;
         this.name = name;
         this.material = material;
         this.materialDamageValue = materialDamageValue;
+        this.cardMovement = cardMovement;
+        this.cardMovement.setOwner(this);
 
         generateItemStack();
     }
 
     protected abstract List<String> generateLore();
+
+    public void setCurrentCell(Cell currentCell) {
+        this.currentCell = currentCell;
+    }
+
+    public Cell getCurrentCell() {
+        return currentCell;
+    }
 
     public void generateItemStack(){
         mesh = new ItemStack(material);

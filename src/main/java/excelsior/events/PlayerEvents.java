@@ -12,6 +12,7 @@ import excelsior.game.hotbars.duel.HotbarHand;
 import excelsior.game.hotbars.duel.HotbarWaitingTurn;
 import excelsior.game.user.UserPlayer;
 import excelsior.utils.PlayerUtils;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -47,18 +48,29 @@ public class PlayerEvents implements Listener {
         int index = event.getPlayer().getInventory().getHeldItemSlot();
         Hotbar current = userPlayer.getCurrentHotbar();
 
-        if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_ADD){
-            if(current instanceof HotbarArenaAdd){
-                current.handle(index, event.getPlayer(), event.getAction());
-            }
-        }
-        else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_DUEL){
-            if(current instanceof HotbarActiveTurn || current instanceof HotbarWaitingTurn || current instanceof HotbarHand ||
-                current instanceof HotbarCardDescription){
-                current.handle(index, event.getPlayer(), event.getAction());
-            }
-        } else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.NORMAL){
+        if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.NORMAL){
 
+        } else {
+            //If hand is empty and right click, have gamemode handle emtpy right hand click
+            if(event.getPlayer().getInventory().getItemInMainHand() == null ||
+                    event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR){
+                Excelsior.INSTANCE.getArenaManager().findArenaWithPlayer(event.getPlayer()).get().handlePlayerRightEmptyClick();
+                return;
+            }
+
+            if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_ADD){
+                if(current instanceof HotbarArenaAdd){
+                    current.handle(index, event.getPlayer(), event.getAction());
+                }
+            }
+            else if(userPlayer.getPlayerMode() == UserPlayer.PlayerMode.ARENA_DUEL){
+                if(current instanceof HotbarActiveTurn || current instanceof HotbarWaitingTurn || current instanceof HotbarHand ||
+                        current instanceof HotbarCardDescription){
+                    current.handle(index, event.getPlayer(), event.getAction());
+                }
+            }
         }
+
+
     }
 }
