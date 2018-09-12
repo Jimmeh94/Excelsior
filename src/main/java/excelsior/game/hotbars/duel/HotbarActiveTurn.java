@@ -61,6 +61,7 @@ public class HotbarActiveTurn extends Hotbar {
 
                 (new HotbarCardManipulate(cpp.getCurrentAim().getOccupyingCard())).setHotbar(player);
                 PlayerUtils.getUserPlayer(player.getUniqueId()).get().setPlayerMode(UserPlayer.PlayerMode.ARENA_MOVING_CARD);
+                cpp.setCurrentlyMovingCard(cpp.getCurrentAim().getOccupyingCard());
             }
         });
         meta = action.getItemMeta();
@@ -68,7 +69,7 @@ public class HotbarActiveTurn extends Hotbar {
         action.setItemMeta(meta);
         addItemWithAction(2, action);
 
-        action = new ActionItemStack(Material.EMPTY_MAP, new ActionItemStack.Callback() {
+        action = new ActionItemStack(Material.MAP, new ActionItemStack.Callback() {
             @Override
             public void action(Player player, Action action) {
 

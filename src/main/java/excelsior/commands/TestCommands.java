@@ -31,13 +31,13 @@ public class TestCommands implements CommandExecutor {
 
                     Location location = player.getLocation();
                     new GridNormal(location.toVector(), location.getWorld().getName(), 11, 11, 3, 3, true,
-                            Material.STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
+                            Material.BLACK_STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
 
                 } else if(args[0].equalsIgnoreCase("arena")){
                     Location location = player.getLocation();
 
                     Grid grid = new GridNormal(location.toVector(), location.getWorld().getName(), 11, 11, 3, 3, true,
-                            Material.STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
+                            Material.BLACK_STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK);
 
                     Excelsior.INSTANCE.getArenaManager().add(new Arena(grid, player.getLocation().getWorld().getName()));
                 } else if(args[0].equalsIgnoreCase("remove")){

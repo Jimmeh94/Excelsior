@@ -1,6 +1,7 @@
 package excelsior.game.cards;
 
 import excelsior.game.match.field.Cell;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -26,5 +27,9 @@ public abstract class CardMovement {
 
     public void setCurrentlyHighlighed(List<Cell> currentlyHighlighed) {
         this.currentlyHighlighed = currentlyHighlighed;
+    }
+
+    public boolean isAvailableSpace(Cell aim) {
+        return currentlyHighlighed != null && currentlyHighlighed.contains(aim);
     }
 }

@@ -1,11 +1,12 @@
 package excelsior.game.match.profiles;
 
 import ecore.services.NMSUtils;
+import excelsior.game.cards.CardBase;
 import excelsior.game.cards.Deck;
 import excelsior.game.hotbars.duel.HotbarHand;
 import excelsior.game.match.field.Cell;
-import net.minecraft.server.v1_12_R1.EntityArmorStand;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_13_R1.EntityArmorStand;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityDestroy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -16,6 +17,7 @@ public class CombatantProfilePlayer extends CombatantProfile {
 
     private Cell currentAim;
     private ViewingClientArmorstand viewingClientArmorstand;
+    private CardBase currentlyMovingCard;
 
     public CombatantProfilePlayer(UUID owner, Deck deck) {
         super(owner, deck);
@@ -31,6 +33,14 @@ public class CombatantProfilePlayer extends CombatantProfile {
 
     public boolean isViewingClientArmorstand(){
         return viewingClientArmorstand != null;
+    }
+
+    public CardBase getCurrentlyMovingCard() {
+        return currentlyMovingCard;
+    }
+
+    public void setCurrentlyMovingCard(CardBase currentlyMovingCard) {
+        this.currentlyMovingCard = currentlyMovingCard;
     }
 
     public void setViewingClientArmorstand(ViewingClientArmorstand v){

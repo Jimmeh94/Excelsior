@@ -3,9 +3,7 @@ package excelsior;
 import ecore.ECore;
 import excelsior.commands.ArenaCommands;
 import excelsior.commands.TestCommands;
-import excelsior.events.ErrorStackEvents;
-import excelsior.events.PlayerEvents;
-import excelsior.events.PlayerModeEvents;
+import excelsior.events.*;
 import excelsior.game.chatchannels.ChatChannelAuction;
 import excelsior.game.chatchannels.ChatChannelGlobal;
 import excelsior.game.chatchannels.ChatChannelStaff;
@@ -25,7 +23,8 @@ public class Excelsior extends JavaPlugin {
     //TODO implement permissions system in ECore, be sure to add to staff chat channel and arena commands
     //TODO store all amorstands in manager and delete on server shutdown and arena end game
     //TODO make despawn method for NMSUtils rather than in CardBase and HotbarCardDescription
-    //TODO make sure hand doesn't go above 6 cards
+    //TODO look at remaking scoreboard with Teams rather than other way. Look at bookmark
+    //TODO Look at using Mongo with Morphia. Look at bookmark
 
     public static Excelsior INSTANCE;
 
@@ -70,6 +69,8 @@ public class Excelsior extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         getServer().getPluginManager().registerEvents(new ErrorStackEvents(), this);
         getServer().getPluginManager().registerEvents(new PlayerModeEvents(), this);
+        getServer().getPluginManager().registerEvents(new WorldEvents(), this);
+        getServer().getPluginManager().registerEvents(new EntityEvents(), this);
     }
 
     private void registerCommands(){

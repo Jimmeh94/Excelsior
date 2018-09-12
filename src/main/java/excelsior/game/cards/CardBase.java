@@ -6,11 +6,11 @@ import excelsior.Excelsior;
 import excelsior.game.match.field.Cell;
 import excelsior.game.match.profiles.CombatantProfilePlayer;
 import excelsior.utils.PlayerUtils;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +28,7 @@ public abstract class CardBase {
     private UUID owner;
     private Pair<EntityArmorStand, List<UUID>> clientArmorStand;
     private EntityArmorStand description;
+    private ArmorStand stand;
     private Material material;
     private short materialDamageValue;
     private ItemStack mesh;
@@ -95,7 +96,7 @@ public abstract class CardBase {
             EntityArmorStand e = new EntityArmorStand(((CraftWorld)spawnLocation.getWorld()).getHandle(), spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ());
             e.setInvisible(true);
             e.setBasePlate(false);
-            e.setCustomName(name);
+            //e.setCustomName(name);
             e.setCustomNameVisible(true);
 
             clientArmorStand = new Pair<>(e, viewers);
@@ -153,7 +154,7 @@ public abstract class CardBase {
         description = new EntityArmorStand(((CraftWorld)location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ());
         description.setInvisible(true);
         description.setBasePlate(false);
-        description.setCustomName(name);
+        //description.setCustomName(name);
         description.setCustomNameVisible(true);
 
         clientArmorStand = new Pair<>(description, Arrays.asList(owner));
@@ -169,13 +170,23 @@ public abstract class CardBase {
     }
 
     public void spawn3DRepresentationServer(Location center) {
-        ArmorStand stand = center.getWorld().spawn(center, ArmorStand.class);
+        stand = center.getWorld().spawn(center, ArmorStand.class);
         stand.setVisible(false);
         stand.setCustomName(name);
         stand.setCustomNameVisible(true);
         stand.setHelmet(new ItemStack(material));
         stand.setBasePlate(false);
         stand.setGravity(false);
+    }
+
+    public void removeArmorStand(){
+        if(stand != null){
+            stand.remove();
+        }
+    }
+
+    public void moveArmorStand(Vector direction){
+        stand.setVelocity(direction.multiply(2));
     }
 
     public CardMovement getMovement() {

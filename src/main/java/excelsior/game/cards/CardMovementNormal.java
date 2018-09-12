@@ -27,25 +27,30 @@ public class CardMovementNormal extends CardMovement {
 
         if(current != null){
             Optional<Cell> target;
-            target = grid.getCellInDirection(current, new Vector(distanceInCells, 0, 0));
-            if(target.isPresent()){
-                cells.add(target.get());
+
+            for(int i = 1; i <= distanceInCells; i++){
+                target = grid.getCellInDirection(current, new Vector(i, 0, 0));
+                if(target.isPresent()){
+                    cells.add(target.get());
+                }
+
+                target = grid.getCellInDirection(current, new Vector(-i, 0, 0));
+                if(target.isPresent()){
+                    cells.add(target.get());
+                }
+
+                target = grid.getCellInDirection(current, new Vector(0, 0, i));
+                if(target.isPresent()){
+                    cells.add(target.get());
+                }
+
+                target = grid.getCellInDirection(current, new Vector(0, 0, -i));
+                if(target.isPresent()){
+                    cells.add(target.get());
+                }
             }
 
-            target = grid.getCellInDirection(current, new Vector(-distanceInCells, 0, 0));
-            if(target.isPresent()){
-                cells.add(target.get());
-            }
 
-            target = grid.getCellInDirection(current, new Vector(0, 0, distanceInCells));
-            if(target.isPresent()){
-                cells.add(target.get());
-            }
-
-            target = grid.getCellInDirection(current, new Vector(0, 0, -distanceInCells));
-            if(target.isPresent()){
-                cells.add(target.get());
-            }
         }
 
         return cells;

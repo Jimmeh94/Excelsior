@@ -61,7 +61,7 @@ public class Cell {
         for(Vector v: locations){
             Block block = Bukkit.getWorld(world).getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
             block.setType(material);
-            block.setData(data);
+            //block.setData(data);
         }
     }
 
@@ -74,7 +74,7 @@ public class Cell {
     public void drawAimForPlayer(Player player){
         for(Vector v: getVectors()){
             player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                    Material.STAINED_GLASS, ByteColors.RED);
+                    Material.RED_STAINED_GLASS, ByteColors.RED);
         }
     }
 
@@ -98,7 +98,7 @@ public class Cell {
     }
 
     public Vector getCenter() {
-        return center;
+        return center.clone();
     }
 
     public boolean isAvailable() {
@@ -107,6 +107,7 @@ public class Cell {
 
     public void setAvailable(boolean b) {
         this.isAvailable = b;
+        occupyingCard = null;
     }
 
     public CardBase getOccupyingCard() {
@@ -124,7 +125,11 @@ public class Cell {
     public void drawAvailableSpaceForPlayer(Player player) {
         for(Vector v: getVectors()){
             player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                    Material.STAINED_GLASS, ByteColors.BLUE);
+                    Material.BLUE_STAINED_GLASS, ByteColors.BLUE);
         }
+    }
+
+    public String getWorld() {
+        return world;
     }
 }

@@ -53,14 +53,55 @@ public abstract class Grid {
     }
 
     public Optional<Cell> getCellInDirection(Cell current, Vector direction){
-        direction.setX(direction.getX() * ((cellDemX * direction.getX()) + (1 * direction.getX())));
-        direction.setZ(direction.getZ() * ((cellDemZ * direction.getZ()) + (1 * direction.getZ())));
+        double xDistance = cellDemX * direction.getX();
+        xDistance += 1 * direction.getX();
 
-        Vector target = current.getCenter().clone().add(direction);
+        double zDistance = cellDemZ * direction.getZ();
+        zDistance += 1 * direction.getZ();
+
+        //direction.setX(direction.getX() * ((cellDemX * direction.getX()) + (1 * direction.getX())));
+        //direction.setZ(direction.getZ() * ((cellDemZ * direction.getZ()) + (1 * direction.getZ())));
+
+        Vector target = current.getCenter().clone().add(new Vector(xDistance, 0, zDistance));
         if(isCell(target)){
-            return getCell(target);
+            Cell cell = getCell(target).get();
+            if(cell.isAvailable()){
+                return Optional.of(cell);
+            }
         }
         return Optional.empty();
+    }
+
+    public List<Cell> getSquareGroupofCells(Vector start, int distanceInCells) {
+        List<Cell> cells = new ArrayList<>();
+
+        double tempDistance = cellDemX + 1;
+        start.setX(start.getX() - (tempDistance * distanceInCells));
+        start.setZ(start.getZ() - (tempDistance * distanceInCells));
+
+        Vector use = start.clone();
+
+        //Now we have bottom right corner of area
+        int limit = distanceInCells * 2;
+        limit += 1;
+
+        for(int i = 0; i < limit; i++){
+            //this first loop will increase z by tempDistance each time
+            for(int j = 0; j < limit; j++){
+                //this second loop will incrase x by tempDistance each time
+                if(isCell(use)){
+                    Cell cell = getCell(use).get();
+                    if(cell.isAvailable()){
+                        cells.add(cell);
+                    }
+                }
+                use.setX(use.getX() + tempDistance);
+            }
+            use.setX(start.getX());
+            use.setZ(use.getZ() + tempDistance);
+        }
+
+        return cells;
     }
 
     public void drawGrid(){
@@ -70,7 +111,7 @@ public abstract class Grid {
         for(Vector v: border){
             Block block = Bukkit.getWorld(world).getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
             block.setType(gridBorder);
-            block.setData(gridBorderData);
+            //block.setData(gridBorderData);
         }
     }
 
