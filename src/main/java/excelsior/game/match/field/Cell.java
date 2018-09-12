@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -21,15 +23,13 @@ public class Cell {
     private List<Vector> locations;
     private String world;
     private Material material;
-    private byte data;
     private boolean isAvailable = true;
     private CardBase occupyingCard;
     private Vector center;
 
-    public Cell(Vector startingPos, int xDem, int zDem, String world, Material material, byte data) {
+    public Cell(Vector startingPos, int xDem, int zDem, String world, Material material) {
         this.world = world;
         this.material = material;
-        this.data = data;
 
         locations = new CopyOnWriteArrayList<>();
 
@@ -73,15 +73,15 @@ public class Cell {
 
     public void drawAimForPlayer(Player player){
         for(Vector v: getVectors()){
-            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                    Material.RED_STAINED_GLASS, ByteColors.RED);
+            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()), Material.RED_STAINED_GLASS.createBlockData());
+            /*player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
+                    Material.RED_STAINED_GLASS, ByteColors.RED);*/
         }
     }
 
     public void clearAimForPlayer(Player player){
         for (Vector v : getVectors()) {
-            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                    getMaterial(), getData());
+            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()), getMaterial().createBlockData());
         }
     }
 
@@ -91,10 +91,6 @@ public class Cell {
 
     public Material getMaterial() {
         return material;
-    }
-
-    public byte getData() {
-        return data;
     }
 
     public Vector getCenter() {
@@ -124,8 +120,7 @@ public class Cell {
 
     public void drawAvailableSpaceForPlayer(Player player) {
         for(Vector v: getVectors()){
-            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()),
-                    Material.BLUE_STAINED_GLASS, ByteColors.BLUE);
+            player.sendBlockChange(new Location(Bukkit.getWorld(world), v.getX(), v.getY(), v.getZ()), Material.BLUE_STAINED_GLASS.createBlockData());
         }
     }
 

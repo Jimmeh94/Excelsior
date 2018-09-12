@@ -27,11 +27,10 @@ public abstract class Grid {
     protected int gridDemX, gridDemZ, cellDemX, cellDemZ;
     protected Vector startPos;
     protected Material gridBorder, cellMat;
-    protected byte gridBorderData, cellData;
 
 
     public Grid(Vector startingPos, String world, int gridDemX, int gridDemZ, int cellDemX, int cellDemZ, boolean drawGrid,
-                Material gridBorder, byte gridBorderData, Material cellMat, byte cellData){
+                Material gridBorder, Material cellMat){
         this.startPos = startingPos;
         this.world = world;
         this.gridDemX = gridDemX;
@@ -40,8 +39,6 @@ public abstract class Grid {
         this.cellDemZ = cellDemZ;
         this.gridBorder = gridBorder;
         this.cellMat = cellMat;
-        this.gridBorderData = gridBorderData;
-        this.cellData = cellData;
         cells = new CopyOnWriteArrayList<>();
         border = new CopyOnWriteArrayList<>();
 
@@ -138,14 +135,6 @@ public abstract class Grid {
 
     public Material getCellMat() {
         return cellMat;
-    }
-
-    public byte getGridBorderData() {
-        return gridBorderData;
-    }
-
-    public byte getCellData() {
-        return cellData;
     }
 
     public String getWorld() {

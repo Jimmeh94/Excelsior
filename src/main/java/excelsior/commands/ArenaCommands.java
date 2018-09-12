@@ -47,7 +47,7 @@ public class ArenaCommands implements CommandExecutor {
                         location.subtract(0, 1, 0);
                         Excelsior.INSTANCE.getArenaManager().add(new Arena(new GridNormal(location.toVector(), world, Integer.valueOf(args[1]),
                                         Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]),
-                                        false, Material.BLACK_STAINED_GLASS, ByteColors.BLACK, Material.BARRIER, ByteColors.BLACK), world));
+                                        false, Material.BLACK_STAINED_GLASS, Material.BARRIER), world));
 
                     } else if(args[0].equalsIgnoreCase("start")){
 

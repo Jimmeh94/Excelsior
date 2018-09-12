@@ -2,6 +2,7 @@ author: Jimmy
 name: Excelsior
 version: 1.0.0
 main: excelsior.Excelsior
+api-version: 1.13
 depend: [ExcelsiorCore]
 commands:
   test:
